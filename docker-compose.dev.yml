@@ -1,0 +1,63 @@
+version: '3.3'
+
+services:
+  authenticationService:
+    image: authentication:latest
+    restart: always
+    ports:
+      - 9090:9090
+    environment:
+      SERVER_PORT: 9090
+      SPRING_PROFILES_ACTIVE: dev
+
+  shipmentService:
+    image: shipment:latest
+    restart: always
+    ports:
+      - 9091:9091
+    environment:
+      SERVER_PORT: 9091
+      SPRING_PROFILES_ACTIVE: dev
+      APP_SAMPLESERVICE: "http://sampleService:9092"
+      APP_BIOBANKSERVICE: "http://biobankService:9093"
+  
+  sampleService:
+    image: sample:latest
+    restart: always
+    ports:
+      - 9092:9092
+    environment:
+      SERVER_PORT: 9092
+      SPRING_PROFILES_ACTIVE: dev
+      APP_USERSERVICE: "http://authenticationService:9090"
+      APP_SHIPMENTSERVICE: "http://shipmentService:9091"
+      APP_BIOBANKSERVICE: "http://biobankService:9093"
+      APP_DONORSERVICE: "http://donorService:9095"
+
+  biobankService:
+    image: biobank:latest
+    restart: always
+    ports:
+      - 9093:9093
+    environment:
+      SERVER_PORT: 9093
+      SPRING_PROFILES_ACTIVE: dev
+
+  donorService:
+    image: donor:latest
+    restart: always
+    ports:
+      - 9095:9095
+    environment:
+      SERVER_PORT: 9095
+      SPRING_PROFILES_ACTIVE: dev
+  
+  sprecsampleService:
+    image: sprecsample:latest
+    restart: always
+    ports:
+      - 9094:9094
+    environment:
+      SERVER_PORT: 9094
+      SPRING_PROFILES_ACTIVE: dev
+  
