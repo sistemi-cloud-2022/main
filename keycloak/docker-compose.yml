@@ -1,0 +1,39 @@
+version: '3.9'
+
+volumes:
+  mysql_data:
+      driver: local
+
+services:
+  keycloak_db:
+      image: mysql:5.7
+      volumes:
+        - mysql_data:/var/lib/keycloak_db
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: keycloak
+        MYSQL_USER: keycloak
+        MYSQL_PASSWORD: password
+  keycloak:
+      image: jboss/keycloak:16.1.1
+      # build:
+      #   context: services/keycloak
+      volumes:
+        - ./imports:/opt/jboss/keycloak/imports
+      command: 
+        - "-b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
+
+      environment:
+        DB_VENDOR: MYSQL
+        DB_ADDR: keycloak_db
+        DB_DATABASE: keycloak
+        DB_USER: keycloak
+        DB_PASSWORD: password
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: admin
+        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
+        #JDBC_PARAMS: "connectTimeout=30000"
+      ports:
+        - 8180:8080
+      depends_on:
+        - keycloak_db
