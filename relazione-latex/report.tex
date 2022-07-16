@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+
+\usepackage{sectsty}
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+% norm function
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\title{ %
+\includegraphics[width=0.4\textwidth]{UniCT-Logo-Nero}~\\
+BiobankSPREC Microservices \\ 
+\large Progetto Sistemi Cloud e Laboratorio (LM-18) \\ Università degli Studi di Catania - A.A 2021/2022 \\
+}
+\author{ Danilo Leocata - 1000022576 \\ Docenti: Giuseppe Pappalardo, Andrea Fornaia}
+\date{\today}
+
+\begin{document}
+
+\maketitle	
+\pagebreak
+
+%--Paper--
+
+\section{Introduzione}
+
+È stato preso in esame un progetto a microservizi .... (inserisci di cosa parla). L'intero progetto è disponibile al seguente link GitHub:
+https://github.com/sistemi-cloud-2022/
+
+\begin{center}
+    inserisci schema ER
+\end{center}
+
+Dopo una accurata analisi le possibili migliorie sarebbero quelle di:
+
+\begin{enumerate}
+    \item {
+        Tutti i microservizi sono contenuti in un unica repository: è stato trovato opportuno (inserisci motivazioni) creare una repository per ogni microservizio
+        in modo da mantenere separate le modifiche al db.
+    }
+
+    \item {
+        Per ogni repository saranno presenti tre branch: test, prod, dev. Ogni modifica nel branch \texttt{prod} e \texttt{test} builderà una immagine docker ed una volta
+        che verrà caricata su un registry (?) docker (corretto ? ha senso ?)
+    }
+
+    \item {
+        Il servizio di autenticazione sarà sostituito da Keycloak
+    }
+
+    \item {
+        Verrà utilizzato Kubernetes come orchestratore dei container [....]
+    }
+    
+    \item {
+        Camunda ?
+    }
+
+    \item {
+        Ansible lo possiamo integrare ? Ha senso ? 
+    }
+
+    \item {
+        Kafka ha senso integrarlo ? 
+    }
+    
+
+\end{enumerate}
+
+
+\section{Keycloak}
+
+Keycloak 
+
+
+\pagebreak
+
+% \begin{thebibliography}{4}
+
+% \bibitem{1} \href{https://pytorch.org/vision/stable/models.html}{Models and Pre-trained Weights}
+% \bibitem{2} \href{
+%     https://pytorch.org/docs/stable/generated/torch.nn.TripletMarginLoss.html
+% }{Triplet Margin Loss}
+% \bibitem{2} \href{
+%     https://pytorch.org/docs/stable/generated/torch.nn.TripletMarginWithDistanceLoss.html#torch.nn.TripletMarginWithDistanceLoss
+% }{Triplet Margin With Distance Loss}
+% \bibitem{4} \href{
+%     https://pytorch.org/docs/stable/generated/torch.nn.PairwiseDistance.html
+% }{PairwiseDistance}
+
+% https://openaccess.thecvf.com/content_CVPR_2020/papers/Ko_Embedding_Expansion_Augmentation_in_Embedding_Space_for_Deep_Metric_Learning_CVPR_2020_paper.pdf
+
+% \end{thebibliography}
+
+
+\pagebreak
+%--/Paper--
+
+\end{document}

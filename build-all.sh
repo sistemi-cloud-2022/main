@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-for service in authentication biobank donor sample shipment sprecsample; do
+for service in biobank donor sample shipment sprecsample; do
 	cd $service
 	./build.sh
 	cd ..

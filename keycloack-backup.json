@@ -46,42 +46,9 @@
   "roles": {
     "realm": [
       {
-        "id": "005d83d5-dc91-4f85-97fa-f2b4261cd7ff",
-        "name": "admin",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "role-biobank",
-            "role-sprec",
-            "role-shipment",
-            "role-sample",
-            "role-donor"
-          ]
-        },
-        "clientRole": false,
-        "containerId": "Biobank",
-        "attributes": {}
-      },
-      {
-        "id": "c29c55fc-1ee4-419d-8b6b-cbf16fe4be8a",
-        "name": "role-sprec",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "Biobank",
-        "attributes": {}
-      },
-      {
         "id": "928d1359-6265-46db-b071-dac4a2934ae0",
         "name": "offline_access",
         "description": "${role_offline-access}",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "Biobank",
-        "attributes": {}
-      },
-      {
-        "id": "dd278316-5294-46ef-bcb2-9cc046682931",
-        "name": "role-shipment",
         "composite": false,
         "clientRole": false,
         "containerId": "Biobank",
@@ -104,30 +71,6 @@
             ]
           }
         },
-        "clientRole": false,
-        "containerId": "Biobank",
-        "attributes": {}
-      },
-      {
-        "id": "91f4b4af-f2f4-4cd2-a7e4-c218566c5c31",
-        "name": "role-biobank",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "Biobank",
-        "attributes": {}
-      },
-      {
-        "id": "be604291-1a8a-47f9-95d5-cc0dd0286206",
-        "name": "role-donor",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "Biobank",
-        "attributes": {}
-      },
-      {
-        "id": "6996b290-fa53-46ed-9b5a-cd0c3bb9835c",
-        "name": "role-sample",
-        "composite": false,
         "clientRole": false,
         "containerId": "Biobank",
         "attributes": {}
@@ -355,10 +298,37 @@
           "attributes": {}
         }
       ],
-      "donor": [],
-      "shipment": [],
+      "donor": [
+        {
+          "id": "f07bd027-d693-4ba0-abea-9f655c2e06d5",
+          "name": "role-donor",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "a3738cef-92d5-43b6-92c2-6debc514e9d0",
+          "attributes": {}
+        }
+      ],
+      "shipment": [
+        {
+          "id": "7bdb1300-84ee-4a49-bb22-150ffcddd129",
+          "name": "role-shipment",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "6ee20ceb-2119-4b60-9d1e-f2836ae6f153",
+          "attributes": {}
+        }
+      ],
       "security-admin-console": [],
-      "sprec-sample": [],
+      "sprec-sample": [
+        {
+          "id": "e7efd3ce-491e-44e7-b705-25667fe75b0c",
+          "name": "role-sprec",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "0a966937-b632-46cf-8b2a-5d78b973726b",
+          "attributes": {}
+        }
+      ],
       "admin-cli": [],
       "account-console": [],
       "broker": [
@@ -372,8 +342,26 @@
           "attributes": {}
         }
       ],
-      "biobank": [],
-      "sample": [],
+      "biobank": [
+        {
+          "id": "45b5ddaa-12ca-42ab-a198-80b6d12fd6ba",
+          "name": "role-biobank",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "343d919c-f948-4963-be20-0c736239dc8f",
+          "attributes": {}
+        }
+      ],
+      "sample": [
+        {
+          "id": "6c6ab239-f5c1-494d-bf42-6111fa5a756f",
+          "name": "role-sample",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "c6477581-5014-455c-a7dc-3f296f4d1594",
+          "attributes": {}
+        }
+      ],
       "account": [
         {
           "id": "0ca7f855-f2c1-4611-970a-d430c1d687df",
@@ -1614,6 +1602,41 @@
   "components": {
     "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy": [
       {
+        "id": "fb0075ba-33c1-4c5d-b1dc-bda02f1eb730",
+        "name": "Max Clients Limit",
+        "providerId": "max-clients",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {
+          "max-clients": [
+            "200"
+          ]
+        }
+      },
+      {
+        "id": "cc1a7ffe-090b-4afb-8928-70c5bb859500",
+        "name": "Trusted Hosts",
+        "providerId": "trusted-hosts",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {
+          "host-sending-registration-request-must-match": [
+            "true"
+          ],
+          "client-uris-must-match": [
+            "true"
+          ]
+        }
+      },
+      {
+        "id": "eaa6df67-8005-4388-b8af-bf3f9300c4af",
+        "name": "Consent Required",
+        "providerId": "consent-required",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {}
+      },
+      {
         "id": "06c6c58b-c8a0-494d-a639-7177f61a05a7",
         "name": "Allowed Protocol Mapper Types",
         "providerId": "allowed-protocol-mappers",
@@ -1664,33 +1687,6 @@
         }
       },
       {
-        "id": "fb0075ba-33c1-4c5d-b1dc-bda02f1eb730",
-        "name": "Max Clients Limit",
-        "providerId": "max-clients",
-        "subType": "anonymous",
-        "subComponents": {},
-        "config": {
-          "max-clients": [
-            "200"
-          ]
-        }
-      },
-      {
-        "id": "cc1a7ffe-090b-4afb-8928-70c5bb859500",
-        "name": "Trusted Hosts",
-        "providerId": "trusted-hosts",
-        "subType": "anonymous",
-        "subComponents": {},
-        "config": {
-          "host-sending-registration-request-must-match": [
-            "true"
-          ],
-          "client-uris-must-match": [
-            "true"
-          ]
-        }
-      },
-      {
         "id": "6c5a9ac1-ab0e-4a85-b6b6-2e4570958e77",
         "name": "Full Scope Disabled",
         "providerId": "scope",
@@ -1709,17 +1705,31 @@
             "true"
           ]
         }
-      },
+      }
+    ],
+    "org.keycloak.userprofile.UserProfileProvider": [
       {
-        "id": "eaa6df67-8005-4388-b8af-bf3f9300c4af",
-        "name": "Consent Required",
-        "providerId": "consent-required",
-        "subType": "anonymous",
+        "id": "a7aeb502-a127-4202-b4ce-1ba64653d622",
+        "providerId": "declarative-user-profile",
         "subComponents": {},
         "config": {}
       }
     ],
     "org.keycloak.keys.KeyProvider": [
+      {
+        "id": "ecdcd494-00bf-439a-9b06-8e12bfaa6ecd",
+        "name": "hmac-generated",
+        "providerId": "hmac-generated",
+        "subComponents": {},
+        "config": {
+          "priority": [
+            "100"
+          ],
+          "algorithm": [
+            "HS256"
+          ]
+        }
+      },
       {
         "id": "18f4c46f-5891-4fdf-ad5e-c79b049ede61",
         "name": "aes-generated",
@@ -1753,20 +1763,6 @@
           ],
           "algorithm": [
             "RSA-OAEP"
-          ]
-        }
-      },
-      {
-        "id": "ecdcd494-00bf-439a-9b06-8e12bfaa6ecd",
-        "name": "hmac-generated",
-        "providerId": "hmac-generated",
-        "subComponents": {},
-        "config": {
-          "priority": [
-            "100"
-          ],
-          "algorithm": [
-            "HS256"
           ]
         }
       }
@@ -2444,12 +2440,18 @@
   "dockerAuthenticationFlow": "docker auth",
   "attributes": {
     "cibaBackchannelTokenDeliveryMode": "poll",
-    "cibaExpiresIn": "120",
     "cibaAuthRequestedUserHint": "login_hint",
-    "oauth2DeviceCodeLifespan": "600",
     "oauth2DevicePollingInterval": "5",
+    "clientOfflineSessionMaxLifespan": "0",
+    "clientSessionIdleTimeout": "0",
+    "userProfileEnabled": "false",
+    "clientOfflineSessionIdleTimeout": "0",
+    "cibaInterval": "5",
+    "cibaExpiresIn": "120",
+    "oauth2DeviceCodeLifespan": "600",
     "parRequestUriLifespan": "60",
-    "cibaInterval": "5"
+    "clientSessionMaxLifespan": "0",
+    "frontendUrl": "http://localhost:8180/auth/"
   },
   "keycloakVersion": "16.1.1",
   "userManagedAccessAllowed": false,

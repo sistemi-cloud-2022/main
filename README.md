@@ -50,3 +50,4 @@ role-donor, role-sample, role-shipment, role-biobank, role-sprec ed un 'ruolo co
     <li>[Setup spring-boot keycloack](https://www.baeldung.com/spring-boot-keycloak )</li>
 </ul>
 
+In caso di errori frequenti nell'imagine `docker-compose down --rmi all`
