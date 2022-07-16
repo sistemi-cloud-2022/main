@@ -1,31 +1,48 @@
-version: '3.3'
+version: '3.9'
+
+volumes:
+  mysql_data:
+      driver: local
 
 services:
-  authenticationService:
-    depends_on:
-      - authentication_db
-    image: authentication:latest
-    restart: always
-    ports:
-      - 9090:9090
-    environment:
-      SERVER_PORT: 9090
-      MYSQL_HOST: authentication_db
-      
-  authentication_db:
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: authentication_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
+  keycloak_db:
+      image: mysql:5.7
+      volumes:
+        - mysql_data:/var/lib/keycloak_db
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: keycloak
+        MYSQL_USER: keycloak
+        MYSQL_PASSWORD: password
+  keycloak:
+      image: jboss/keycloak:16.1.1
+      # build:
+      #   context: services/keycloak
+      volumes:
+        - ./imports:/opt/jboss/keycloak/imports
+      command: 
+        - "-b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
+
+      environment:
+        DB_VENDOR: MYSQL
+        DB_ADDR: keycloak_db
+        DB_DATABASE: keycloak
+        DB_USER: keycloak
+        DB_PASSWORD: password
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: admin
+        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
+        #JDBC_PARAMS: "connectTimeout=30000"
+      ports:
+        - 8081:8080
+      depends_on:
+        - keycloak_db
 
   shipmentService:
     depends_on:
       - shipment_db
     image: shipment:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - 9091:9091
     environment:
@@ -36,7 +53,7 @@ services:
   
   shipment_db:
     image: mysql:5.7
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: shipment_db
@@ -47,20 +64,20 @@ services:
     depends_on:
       - sample_db
     image: sample:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - 9092:9092
     environment:
       SERVER_PORT: 9092
       MYSQL_HOST: sample_db
-      APP_USERSERVICE: "http://authenticationService:9090"
+      # APP_USERSERVICE: "http://authenticationService:9090" TODO: Sostituire con keycloack?
       APP_SHIPMENTSERVICE: "http://shipmentService:9091"
       APP_BIOBANKSERVICE: "http://biobankService:9093"
       APP_DONORSERVICE: "http://donorService:9095"
   
   sample_db:
     image: mysql:5.7
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: sample_db
@@ -71,7 +88,7 @@ services:
     depends_on:
       - biobank_db
     image: biobank:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - 9093:9093
     environment:
@@ -80,7 +97,7 @@ services:
 
   biobank_db:
     image: mysql:5.7
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: biobank_db
@@ -91,7 +108,7 @@ services:
     depends_on:
       - donor_db
     image: donor:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - 9095:9095
     environment:
@@ -100,7 +117,7 @@ services:
 
   donor_db:
     image: mysql:5.7
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: donor_db
@@ -111,7 +128,7 @@ services:
     depends_on:
       - sprecsample_db
     image: sprecsample:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - 9094:9094
     environment:
@@ -120,11 +137,9 @@ services:
 
   sprecsample_db:
     image: mysql:5.7
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: sprecsample_db
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
-
-  
