@@ -61,7 +61,7 @@ services:
       MYSQL_PASSWORD: admin
       volumes:
     volumes:
-      - "./shipment-db.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./imports/shipment-db.sql:/docker-entrypoint-initdb.d/1.sql"
     container_name: shipment_db
   sampleService:
     depends_on:
@@ -87,7 +87,7 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
     volumes:
-      - "./sample-db.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./imports/sample-db.sql:/docker-entrypoint-initdb.d/1.sql"
     container_name: sample_db
 
   biobankService:
@@ -110,7 +110,7 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
     volumes:
-      - "./biobank-db.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./imports/biobank-db.sql:/docker-entrypoint-initdb.d/1.sql"
     container_name: biobank_db
 
   donorService:
@@ -133,7 +133,7 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
     volumes:
-      - "./donor-db.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./imports/donor-db.sql:/docker-entrypoint-initdb.d/1.sql"
     container_name: donor_db
 
   sprecsampleService:
@@ -156,5 +156,5 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
     volumes:
-      - "./sprecsample-db.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./imports/sprecsample-db.sql:/docker-entrypoint-initdb.d/1.sql"
     container_name: sprecsample_db

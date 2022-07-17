@@ -1,11 +1,6 @@
 #!/bin/bash
 
-# for service in biobank donor sample shipment sprecsample; do
-# 	cd $service
-# 	./build.sh
-# 	cd ..
-# done
-
+# create if not exist all repo
 mkdir -p development
 
 git clone https://github.com/sistemi-cloud-2022/sample-db development/sample-db/
@@ -23,22 +18,34 @@ git clone https://github.com/sistemi-cloud-2022/donor development/donor/
 git clone https://github.com/sistemi-cloud-2022/biobank-db development/biobank-db/
 git clone https://github.com/sistemi-cloud-2022/biobank development/biobank/
 
-cp -v extract-sql.sh development/
-chmod u+x development/extract-sql.sh
+# TODO: crea uno script per fare il checkout del main e fare il pull.
 
-cp -v build-all.sh development/
-chmoud u+x development/build-all.sh
+# cp -v get-sql.sh development/
+# chmod u+x development/get-sql.sh
 
-# copy all import keycloak
+# cp -v build-all.sh development/
+# chmod u+x development/build-all.sh
 
-
+cp -r keycloak/imports development
 
 cd development
 
-./extract-sql.sh
+# ---- get data from db's repo -----
 
-./build-all.sh
+for db in biobank-db donor-db sample-db shipment-db sprecsample-db; do
+	cp -v $db/$db.sql imports
+done
+
+# ---- build all microservices -----
+
+for service in biobank donor sample shipment sprecsample; do
+	cd $service
+	./build.sh
+	cd ..
+done
 
 cd ..
+
+# copy docker-compose in dev folder to be executed
 
 cp -v docker-compose.yml development/docker-compose.yml
