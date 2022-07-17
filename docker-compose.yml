@@ -34,7 +34,7 @@ services:
         # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
         #JDBC_PARAMS: "connectTimeout=30000"
       ports:
-        - 8081:8080
+        - 8180:8080
       depends_on:
         - keycloak_db
 
@@ -59,7 +59,10 @@ services:
       MYSQL_DATABASE: shipment_db
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
-  
+      volumes:
+    volumes:
+      - "./shipment-db.sql:/docker-entrypoint-initdb.d/1.sql"
+    container_name: shipment_db
   sampleService:
     depends_on:
       - sample_db
@@ -83,6 +86,9 @@ services:
       MYSQL_DATABASE: sample_db
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
+    volumes:
+      - "./sample-db.sql:/docker-entrypoint-initdb.d/1.sql"
+    container_name: sample_db
 
   biobankService:
     depends_on:
@@ -103,6 +109,9 @@ services:
       MYSQL_DATABASE: biobank_db
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
+    volumes:
+      - "./biobank-db.sql:/docker-entrypoint-initdb.d/1.sql"
+    container_name: biobank_db
 
   donorService:
     depends_on:
@@ -123,7 +132,10 @@ services:
       MYSQL_DATABASE: donor_db
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
-      
+    volumes:
+      - "./donor-db.sql:/docker-entrypoint-initdb.d/1.sql"
+    container_name: donor_db
+
   sprecsampleService:
     depends_on:
       - sprecsample_db
@@ -143,3 +155,6 @@ services:
       MYSQL_DATABASE: sprecsample_db
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
+    volumes:
+      - "./sprecsample-db.sql:/docker-entrypoint-initdb.d/1.sql"
+    container_name: sprecsample_db

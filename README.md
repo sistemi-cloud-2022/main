@@ -51,3 +51,29 @@ role-donor, role-sample, role-shipment, role-biobank, role-sprec ed un 'ruolo co
 </ul>
 
 In caso di errori frequenti nell'imagine `docker-compose down --rmi all`
+
+## Comandi utili
+
+Enter inside docker container db
+
+`docker exec -it CONTAINER_ID mysql -u admin -p`
+
+See all db
+
+`SHOW DATABASES;`
+
+Use some DB
+
+`USE DB_NAME;`
+
+Effettuare un dump dal database da un container docker 
+
+```
+docker exec CONTAINER_ID /usr/bin/mysqldump -u admin --password=admin DATABASE_NAME > backup.sql --no-tablespaces -y 
+```
+
+Copia il file di backup in una directory locale
+
+```
+cp backup.sql DIR_DEST | docker exec -i CONTAINER_ID /usr/bin/mysql -u admin --password=admin DATABASE
+```
