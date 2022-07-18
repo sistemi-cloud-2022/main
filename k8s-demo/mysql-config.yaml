@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: donor-mysql-config # arbitrary name
+data: # the actual contents - key-value pairs
+  mysql-url: donor-db-service
+  # mongo-url: mongo-service # service we're going to creare for mongdb application

@@ -52,7 +52,7 @@ role-donor, role-sample, role-shipment, role-biobank, role-sprec ed un 'ruolo co
 
 In caso di errori frequenti nell'imagine `docker-compose down --rmi all`
 
-## Comandi utili
+## Docker
 
 Enter inside docker container db
 
@@ -243,3 +243,57 @@ services:
       - "./imports/sprecsample-db.sql:/docker-entrypoint-initdb.d/1.sql"
     container_name: sprecsample_db
 `````
+
+
+## Kubernetes
+
+Create and start the cluster 
+
+`minikube start --driver docker`
+
+See if everything is running properly
+
+`minikube status`
+
+Display all nodes in cluster
+
+`kubectl get node`
+
+Inside folder `k8s-demo`, four configuration files:
+
+<ul>
+  <li>Mysql Endopoint</li>
+  <li>Secret Mysql user & pswd</li>
+  <li>Deployment & Service: </li> mysqlApplication with internal service
+  <li>Deployment & Service: </li> some microservice config files
+</ul>
+
+Create secret first (do for config and secret, first database after be)
+
+`kubectl apply -f CONFIG_FILE.yaml`
+
+Get info:
+
+`kubectl get all`
+
+`kubectl describe NAME_OF_SERVICE NAME_OF_SPECIFIC_SERVICE`
+
+examples:
+
+`kubectl describe service donor-service`
+
+`kubectl describe pod donor-deployment-756b467d4d-2g7xk`
+
+`kubectl logs POD_NAME -f`
+
+How to access service from browser?
+
+`kubectl get svc -o wide`
+
+`minikube ip`
+
+How to get internal IP:
+
+`kubectl get node -o wide` 
+
+Get minikube IP and listen to that port

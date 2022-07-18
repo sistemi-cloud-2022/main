@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: donor-deployment
+  labels:
+    app: donor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: donor
+  template:
+    metadata:
+      labels:
+        app: donor
+    spec:
+      containers:
+      - name: donor
+        image: khalld/donor:latest
+        ports:
+        - containerPort: 9095
+        env:
+        # make configuration cleaner like mysql config
+        # - name: SERVER_PORT
+        #   value: 9095
+        - name: MYSQL_HOST
+          value: donor_db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: donor-service
+spec:
+  type: NodePort # external service type
+  selector:
+    app: donor
+  ports:
+    - protocol: TCP
+      port: 9095
+      targetPort: 9095
+      nodePort: 30100 # expose service on each node's ip static port
