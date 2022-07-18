@@ -81,10 +81,21 @@ Dopo una accurata analisi le possibili migliorie sarebbero quelle di:
 
 \end{enumerate}
 
+Per prima cosa è stata dunque creata una repository per ogni microservizio. Dopo un'accurata analisi è stato trovato tenere separato
+il database dal microservizio. [ inserisci motivazioni ???? ]. Sono stati realizzati degli script per agevolare il deploy, in particolare nel repository \texttt{main} sono stati
+creati due script
+
+\begin{enumerate}
+    \item \texttt{setup-dev.sh}: crea una cartella \texttt{development}, effettuando un clone del repository, prepara i file in modo da renderli eseguibili per il docker compose (builda anche le immagini). Inoltre copia
+        tutti i file a livello di configurazione all'interno della cartella \texttt{imports} (a partire dalle varie repository)
+    \item \texttt{update-repo.sh}: script che effettua pull di tutti i branch per sincronizzarne le modifiche
+\end{enumerate}
+
 
 \section{Keycloak}
 
-Keycloak 
+Keycloak è un [....] . Sono stati creati dei client per ogni client e ad ognuno di questi avrà un ruolo associato.
+In questo modo ogni utente dovrà avere il ruolo del client associato per poter effettuare la richiesta.
 
 
 \pagebreak

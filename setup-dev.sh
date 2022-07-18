@@ -18,13 +18,12 @@ git clone https://github.com/sistemi-cloud-2022/donor development/donor/
 git clone https://github.com/sistemi-cloud-2022/biobank-db development/biobank-db/
 git clone https://github.com/sistemi-cloud-2022/biobank development/biobank/
 
-# TODO: crea uno script per fare il checkout del main e fare il pull.
+# ---- copy script to update all repos ----
 
-# cp -v get-sql.sh development/
-# chmod u+x development/get-sql.sh
+cp -v update-repo.sh development/
+chmod u+x development/update-repo.sh
 
-# cp -v build-all.sh development/
-# chmod u+x development/build-all.sh
+# ---- copy keycloak realm configuration to import with docker-compose ----
 
 cp -r keycloak/imports development
 
