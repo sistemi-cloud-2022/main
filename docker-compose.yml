@@ -41,7 +41,7 @@ services:
   shipmentService:
     depends_on:
       - shipment_db
-    image: shipment:latest
+    image: khalld/shipment:latest
     restart: unless-stopped
     ports:
       - 9091:9091
@@ -66,7 +66,7 @@ services:
   sampleService:
     depends_on:
       - sample_db
-    image: sample:latest
+    image: khalld/sample:latest
     restart: unless-stopped
     ports:
       - 9092:9092
@@ -93,7 +93,7 @@ services:
   biobankService:
     depends_on:
       - biobank_db
-    image: biobank:latest
+    image: khalld/biobank:latest
     restart: unless-stopped
     ports:
       - 9093:9093
@@ -116,7 +116,7 @@ services:
   donorService:
     depends_on:
       - donor_db
-    image: donor:latest
+    image: khalld/donor:latest
     restart: unless-stopped
     ports:
       - 9095:9095
@@ -139,7 +139,7 @@ services:
   sprecsampleService:
     depends_on:
       - sprecsample_db
-    image: sprecsample:latest
+    image: khalld/sprecsample:latest
     restart: unless-stopped
     ports:
       - 9094:9094

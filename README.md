@@ -77,3 +77,169 @@ Copia il file di backup in una directory locale
 ```
 cp backup.sql DIR_DEST | docker exec -i CONTAINER_ID /usr/bin/mysql -u admin --password=admin DATABASE
 ```
+
+
+Sostituisci questo il docker docker-compose di development se si vogliono avviare i microservizi utilizzando le build delle immagini in locale (TODO: verificare se può essere utile inserire dentro il docker-compose.yml del developement questo di seguito piuttosto che quello utilizzato prendendo le immagini da docker hub)
+
+`````
+version: '3.9'
+
+volumes:
+  mysql_data:
+      driver: local
+
+services:
+  keycloak_db:
+      image: mysql:5.7
+      volumes:
+        - mysql_data:/var/lib/keycloak_db
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: keycloak
+        MYSQL_USER: keycloak
+        MYSQL_PASSWORD: password
+  keycloak:
+      image: jboss/keycloak:16.1.1
+      # build:
+      #   context: services/keycloak
+      volumes:
+        - ./imports:/opt/jboss/keycloak/imports
+      command: 
+        - "-b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
+
+      environment:
+        DB_VENDOR: MYSQL
+        DB_ADDR: keycloak_db
+        DB_DATABASE: keycloak
+        DB_USER: keycloak
+        DB_PASSWORD: password
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: admin
+        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
+        #JDBC_PARAMS: "connectTimeout=30000"
+      ports:
+        - 8180:8080
+      depends_on:
+        - keycloak_db
+
+  shipmentService:
+    depends_on:
+      - shipment_db
+    image: shipment:latest
+    restart: unless-stopped
+    ports:
+      - 9091:9091
+    environment:
+      SERVER_PORT: 9091
+      MYSQL_HOST: shipment_db
+      APP_SAMPLESERVICE: "http://sampleService:9092"
+      APP_BIOBANKSERVICE: "http://biobankService:9093"
+  
+  shipment_db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: shipment_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      volumes:
+    volumes:
+      - "./imports/shipment-db.sql:/docker-entrypoint-initdb.d/1.sql"
+    container_name: shipment_db
+  sampleService:
+    depends_on:
+      - sample_db
+    image: sample:latest
+    restart: unless-stopped
+    ports:
+      - 9092:9092
+    environment:
+      SERVER_PORT: 9092
+      MYSQL_HOST: sample_db
+      # APP_USERSERVICE: "http://authenticationService:9090" TODO: Sostituire con keycloack?
+      APP_SHIPMENTSERVICE: "http://shipmentService:9091"
+      APP_BIOBANKSERVICE: "http://biobankService:9093"
+      APP_DONORSERVICE: "http://donorService:9095"
+  
+  sample_db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sample_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      - "./imports/sample-db.sql:/docker-entrypoint-initdb.d/1.sql"
+    container_name: sample_db
+
+  biobankService:
+    depends_on:
+      - biobank_db
+    image: biobank:latest
+    restart: unless-stopped
+    ports:
+      - 9093:9093
+    environment:
+      SERVER_PORT: 9093
+      MYSQL_HOST: biobank_db
+
+  biobank_db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: biobank_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      - "./imports/biobank-db.sql:/docker-entrypoint-initdb.d/1.sql"
+    container_name: biobank_db
+
+  donorService:
+    depends_on:
+      - donor_db
+    image: donor:latest
+    restart: unless-stopped
+    ports:
+      - 9095:9095
+    environment:
+      SERVER_PORT: 9095
+      MYSQL_HOST: donor_db
+
+  donor_db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: donor_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      - "./imports/donor-db.sql:/docker-entrypoint-initdb.d/1.sql"
+    container_name: donor_db
+
+  sprecsampleService:
+    depends_on:
+      - sprecsample_db
+    image: sprecsample:latest
+    restart: unless-stopped
+    ports:
+      - 9094:9094
+    environment:
+      SERVER_PORT: 9094
+      MYSQL_HOST: sprecsample_db
+
+  sprecsample_db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sprecsample_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      - "./imports/sprecsample-db.sql:/docker-entrypoint-initdb.d/1.sql"
+    container_name: sprecsample_db
+`````

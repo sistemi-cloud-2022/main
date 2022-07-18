@@ -5,6 +5,7 @@
 for service in biobank biobank-db donor donor-db sample sample-db shipment shipment-db sprecsample sprecsample-db; do
 	cd $service
 	git pull origin main
+	./build.sh
 	cd ..
 done
 
