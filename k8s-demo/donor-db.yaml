@@ -64,25 +64,22 @@ spec: # deploy specific specification
         - containerPort: 3306
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: root
-          # valueFrom:
-          #   secretKeyRef:
-          #     name: db-secrets
-          #     key: mysql-root-pwd
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: mysql-root-pwd
         - name: MYSQL_DATABASE
           value: donor_db
         - name: MYSQL_USER
-          value: admin
-          # valueFrom:
-          #   secretKeyRef:
-          #     name: db-secrets
-          #     key: mysql-user
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: mysql-user
         - name: MYSQL_PASSWORD
-          value: admin
-          # valueFrom:
-          #   secretKeyRef:
-          #     name: db-secrets
-          #     key: mysql-password
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: mysql-password
         volumeMounts:
         - name: data
           mountPath: /var/lib/mysql
