@@ -1,13 +1,10 @@
 # sistemi-cloud-unict-2022
 
+`setup-dev.sh` script bash che clona tutte le repository necessarie per avviare il progetto nella cartella `development`. Builda le immagini dei microservizi, sistema i file di configurazione di keycloak e dei database in modo tale che possano essere utilizzati dal docker compose.
 
-Requirements:
+`update-repo.sh` script bash da eseguire dentro la directory `development` che si occuperà di aggiornare all'ultima versione gli script, imports e le immagini di dei microservizi.
 
-<ul>
-    <li>Docker</li>
-</ul>
-
-## Setup Keycloack
+## Keycloack
 
 Download latest image from docker
 
@@ -23,50 +20,24 @@ Example
 
 Andando su `localhost:8180` sarà possibile accedere alla console con username e password `admin`
 
-È stato creato un realm chiamato Biobank (inserisci considerazioni su perché ne hai creato uno solo)
+[Getting started with Keycloack](https://www.keycloak.org/getting-started/getting-started-docker
+) (Procedura per creazione utente, realm e client) <br>
+[Setup spring-boot keycloack](https://www.baeldung.com/spring-boot-keycloak )
 
-Sono stati creati dei client così come dei servizi.
-
-Sono stati creati dei client con i seguenti valid-redirect-uri
-
-http://localhost:9095/*     Donor Service
-http://localhost:9092/*     Sample Service
-http://localhost:9091/*     Shipment Service
-http://localhost:9093/*     Biobank Service
-http://localhost:9094/*     Sprec Sample Service
-
-TODO: Conviene inserire un redirect url su Base Url ? 
-
-E si creano i rispettivi ruoli:
-
-role-donor, role-sample, role-shipment, role-biobank, role-sprec ed un 'ruolo composto' amministratore che è composto da i ruoli precedentemente citati.
-
-
-## Link utili
-
-<ul>
-    <li>[Getting started with Keycloack](https://www.keycloak.org/getting-started/getting-started-docker
-) (Procedura per creazione utente, realm e client)</li>
-    <li>[Setup spring-boot keycloack](https://www.baeldung.com/spring-boot-keycloak )</li>
-</ul>
-
-In caso di errori frequenti nell'imagine `docker-compose down --rmi all`
 
 ## Docker
 
-Enter inside docker container db
+Il `docker-compose.yaml` presente nella directory principale della repository è 'pronto all'uso' in quanto utilizzerà le immagini caricate nel registry di docker. Non necessita dunque delle immagini buildate dei vari microservizi.
+
+In caso di errori frequenti del docker-compose `docker-compose down --rmi all`
+
+Enter inside docker container mysql
 
 `docker exec -it CONTAINER_ID mysql -u admin -p`
 
-See all db
+Now it will be possible use `SQL` syntax: like `SHOW DATABASES;` `USE DB_NAME;`
 
-`SHOW DATABASES;`
-
-Use some DB
-
-`USE DB_NAME;`
-
-Effettuare un dump dal database da un container docker 
+Effettuare un dump dal database di un container docker 
 
 ```
 docker exec CONTAINER_ID /usr/bin/mysqldump -u admin --password=admin DATABASE_NAME > backup.sql --no-tablespaces -y 
@@ -79,7 +50,9 @@ cp backup.sql DIR_DEST | docker exec -i CONTAINER_ID /usr/bin/mysql -u admin --p
 ```
 
 
-Sostituisci questo il docker docker-compose di development se si vogliono avviare i microservizi utilizzando le build delle immagini in locale (TODO: verificare se può essere utile inserire dentro il docker-compose.yml del developement questo di seguito piuttosto che quello utilizzato prendendo le immagini da docker hub)
+### Docker-compose builded images from repos
+
+Se si volesse eseguire l'intero progetto utilizzando le immagini buildate delle repository, dopo aver eseguito `setup-dev.sh` è necessario sostituire il `docker-compose` della folder di `development` con il seguente:
 
 `````
 version: '3.9'
@@ -244,7 +217,6 @@ services:
     container_name: sprecsample_db
 `````
 
-
 ## Kubernetes
 
 Create and start the cluster 
@@ -259,16 +231,7 @@ Display all nodes in cluster
 
 `kubectl get node`
 
-Inside folder `k8s-demo`, four configuration files:
-
-<ul>
-  <li>Mysql Endopoint</li>
-  <li>Secret Mysql user & pswd</li>
-  <li>Deployment & Service: </li> mysqlApplication with internal service
-  <li>Deployment & Service: </li> some microservice config files
-</ul>
-
-Create secret first (do for config and secret, first database after be)
+Apply configuration file (create secret and config first)
 
 `kubectl apply -f CONFIG_FILE.yaml`
 
@@ -284,6 +247,8 @@ examples:
 
 `kubectl describe pod donor-deployment-756b467d4d-2g7xk`
 
+Show logs:
+
 `kubectl logs POD_NAME -f`
 
 How to access service from browser?
@@ -298,17 +263,16 @@ How to get internal IP:
 
 Get minikube IP and listen to that port
 
-
 Entrare in bash all'interno di un pod DB mysql:
 
 `kubectl exec --stdin --tty POD_NAME -- /bin/bash` 
 
 `mysql -p` com password `root`
 
-
 #### K8s commands
 
 ##### start Minikube and check status
+    minikube start --driver docker
     minikube start --vm-driver=hyperkit 
     minikube status
 
@@ -341,6 +305,6 @@ Entrare in bash all'interno di un pod DB mysql:
 
 If you can't access the NodePort service webapp with `MinikubeIP:NodePort`, execute the following command:
     
-    minikube service webapp-service
+    minikube service pod-service
 
 <br />
