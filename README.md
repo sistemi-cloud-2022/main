@@ -297,3 +297,10 @@ How to get internal IP:
 `kubectl get node -o wide` 
 
 Get minikube IP and listen to that port
+
+
+Entrare in bash all'interno di un pod DB mysql:
+
+`kubectl exec --stdin --tty POD_NAME -- /bin/bash` 
+
+`mysql -p` com password `root`

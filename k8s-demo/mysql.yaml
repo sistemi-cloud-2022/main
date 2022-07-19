@@ -32,19 +32,19 @@ spec: # deploy specific specification
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: db-secrets
               key: mysql-root-pwd
         - name: MYSQL_DATABASE
           value: donor_db
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: db-secrets
               key: mysql-user
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: db-secrets
               key: mysql-password  
 ---
 apiVersion: v1

@@ -1,0 +1,109 @@
+# ---- mysql initialization with init container that contrain script file to be executed -----
+
+# this pvc will be used to store downloaded init.sql file
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: init-script
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 50Mi
+---
+# this pvc will be used to store mysql database
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mysql-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: donor-mysql-deployment
+  # you can give any k8s component a label
+  # are key/value apirs that are attached to k8s resoruces
+  # identifier, which should be meaningful and relevant to users
+  # but i possible share the same label. For PODS is required
+  labels:
+    app: donor-mysql
+spec: # deploy specific specification
+  replicas: 1 # how many pods want to create. 1 'cause is a Db
+  selector: # identify a set of resources
+    matchLabels: # match all pods match with labels ...
+      # use app when you want to develop your application [best practice]
+      app: donor-mysql
+  template: # Blueprint for Pods defined by template. Is a configuration for pod
+    metadata:
+      labels:
+        app: donor-mysql
+    spec:
+      initContainers:  # this init container download init.sql file using "curl -o <downloaded file name with path> <download url>" command.
+      - name: init-script-downloader
+        image: appropriate/curl
+        args:
+          - "-o"
+          - "/tmp/data/init.sql" # we are saving downloaded file as init.sql in /tmp/data directory
+          - "https://raw.githubusercontent.com/sistemi-cloud-2022/donor-db/main/donor-db.sql" # download url
+        volumeMounts:
+        - name: init-script # mount the volume where downloaded file will be saved
+          mountPath: /tmp/data
+      containers:  # list of containers used to create by pod
+      - image: mysql:5.7
+        name: donor-db
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: db-secrets
+          #     key: mysql-root-pwd
+        - name: MYSQL_DATABASE
+          value: donor_db
+        - name: MYSQL_USER
+          value: admin
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: db-secrets
+          #     key: mysql-user
+        - name: MYSQL_PASSWORD
+          value: admin
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: db-secrets
+          #     key: mysql-password
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d # we are mounting init-script volume in this directory. so init.sql file will be available here.
+      volumes:
+      - name: init-script # this volume holds downloaded init.sql file.
+        persistentVolumeClaim:
+          claimName: init-script
+      - name: data # this volume will be used for database storage.
+        persistentVolumeClaim:
+          claimName: mysql-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: donor-db-service # nome relativo a quello di configuraizone
+spec:
+  selector:
+    app: donor-mysql  # select pods to forward the request to ...
+  ports:
+    - protocol: TCP
+      port: 3360 # service port
+      targetPort: 3360 # containerPort of deployment
