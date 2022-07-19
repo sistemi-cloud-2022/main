@@ -29,27 +29,27 @@ spec:
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: donor-mysql-deployment
+  name: sprecsample-mysql-deployment
   # you can give any k8s component a label
   # are key/value apirs that are attached to k8s resoruces
   # identifier, which should be meaningful and relevant to users
   # but i possible share the same label. For PODS is required
   labels:
-    app: donor-mysql
+    app: sprecsample-mysql
 spec: # deploy specific specification
   replicas: 1 # how many pods want to create. 1 'cause is a Db
   selector: # identify a set of resources
     matchLabels: # match all pods match with labels ...
       # use app when you want to develop your application [best practice]
-      app: donor-mysql
+      app: sprecsample-mysql
   template: # Blueprint for Pods defined by template. Is a configuration for pod
     metadata:
       labels:
-        app: donor-mysql
+        app: sprecsample-mysql
     spec:
       containers:  # list of containers used to create by pod
       - image: mysql:5.7
-        name: donor-db
+        name: sprecsample-db
         ports:
         - containerPort: 3306
         env:
@@ -59,7 +59,7 @@ spec: # deploy specific specification
               name: db-secrets
               key: mysql-root-pwd
         - name: MYSQL_DATABASE
-          value: donor_db
+          value: sprecsample_db
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
@@ -76,15 +76,15 @@ spec: # deploy specific specification
       volumes:
       - name: init-script # this volume holds downloaded init.sql file.
         configMap:
-          name: donor-mysql-config
+          name: sprecsample-mysql-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: donor-db-service # nome relativo a quello di configuraizone
+  name: sprecsample-db-service # nome relativo a quello di configuraizone
 spec:
   selector:
-    app: donor-mysql  # select pods to forward the request to ...
+    app: sprecsample-mysql  # select pods to forward the request to ...
   ports:
     - protocol: TCP
       port: 3360 # service port
