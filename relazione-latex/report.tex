@@ -37,11 +37,11 @@ BiobankSPREC Microservices \\
 
 \section{Introduzione}
 
-È stato preso in esame un progetto a microservizi (inserisci di cosa parla) realizzato precedentemente dal collega.
-L'intero progetto è disponibile al seguente link GitHub: (link progetto vecchio).
+È stato preso in esame un progetto a microservizi (TODO: inserisci di cosa parla) realizzato precedentemente dal collega.
+L'intero progetto è disponibile al seguente link GitHub: \href{https://github.com/sistemi-cloud-2022}{https://github.com/sistemi-cloud-2022}.
 
 \begin{center}
-    \includegraphics{architettura.png}
+    \includegraphics[width=0.6\linewidth]{architettura.png}
     \captionof{figure}{Architettura iniziale}
 \end{center}
 
@@ -63,6 +63,7 @@ In generale, sono stati effettuati i seguenti miglioramenti su ogni microservizi
     \item {Sono stati estratti, dai rispettivi container docker, le tabelle ed i dati su file \texttt{.sql} (inizialmente il db veniva inizializzato a run-time durante l'avvio del microservizio);}
     \item {I file \texttt{pom.xml} sono stati stato revisionati ed aggiornati;}
     \item {Il formato delle API è stato cambiato da \textit{camelCase} ad \textit{hypenate}}
+    \item {Per ogni repository è stato implementato un \texttt{docker-compose.yaml}}
     \item {I file \texttt{application.properties} sono stati stato convertiti in formato \texttt{.yml} e splittato in \texttt{dev}, per lo sviluppo, e \texttt{prod} per il deploy.}
     \item {Sono state implementate le \textbf{Git Actions} }
     \item {Orchestrazione dei microservizi con \textbf{Kubernetes}}
@@ -91,15 +92,173 @@ Si riassumono brevemente alcuni dei concetti principali:
     \item {\textbf{Client role}: i clients possono definire ruoli specifici.}
 \end{enumerate}
 
-Brevemente, di seguito, saranno spiegati di seguito i passi necessari per la configurazione di Keycloak
+Di seguito, saranno spiegati brevemente i passi necessari per la configurazione di Keycloak. Si nota che nel README del \textit{main} è presente una breve introduzione per avviare Keycloak in locale utilizzando docker.
 
 \subsection{Creazione di un realm}
 
+Dirigersi sull'indirizzo di Keycloak, nel nostro caso \texttt{http://localhost:8180/}
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_01.png}
+\end{center}
+
+Cliccare su \textit{administration console} ed effettuare la login con le credenziali dell'utente di amministrazione. In basso
+troviamo la pagina iniziale.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_02.png}
+\end{center}
+
+Dirigiamogi con il cursore su \texttt{Master}: apparirà un menù a tendina che comprenderà l'elenco dei realm già creati e un bottone che darà la possibilità di crearli.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_03.png}
+\end{center}
+
+Cliccando su \textit{Add realm} si aprirà un form che permetterà di iniziare a configurare il nostro realm
+
+\textbf{Attenzione: da documentazione non è consigliato effettuare le configurazioni sul realm Master!}
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_04.png}
+\end{center}
+
+Vi è anche l'opzione di importare i settings del realm da file \texttt{.json}
+
+\textbf{NB: I nomi assegnati sono tutti case sensitive!}
+
 \subsection{Creazione di un client}
+
+Una volta creato il realm, dirigiamoci sul tab \textit{Clients} e clicchiamo sul pulsante \textit{Create}
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_05.png}
+\end{center}
+
+Inseriamo il nostro client id e clicchiamo su \textit{Save}
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_06.png}
+\end{center}
+
+Dopo aver salvato le configurazioni del nuovo client la pagina si aggiornerà con nuovi campi. Per prima cosa è necessario
+assegnare uno o più \textit{Valid redirect URIs} (cioé, un elenco di URI validi sui quali il browser può reindirizzare dopo login o logout), nel nostro caso inseriamo l'indirizzo del nostro microservizio.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_07.png}
+\end{center}
 
 \subsection{Creazione di un ruolo}
 
+Infine, cliccare sulla tab in alto \textit{Roles}.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_08.png}
+\end{center}
+
+Si nota che la lista di ruoli è vuota, cliccare su \textit{Add Role}.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_09.png}
+\end{center}
+
+Dopo aver scelto il nome del ruolo cliccare su \textit{Save}. Tornando indietro, al tab \textit{Roles} del client precedentemente selezionato, il nostro ruolo apparirà nella lista.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_10.png}
+\end{center}
+
+\subsection{Creazione di un utente ed assegnazione di un ruolo}
+
+Si nota che Keycloak fornisce le pagine di login e registrazione degli utenti (personalizzabili).
+Tuttavia, in questo caso, si prenderà in esame solo la parte di \textit{gestione} dell'utenza lato back-office. Per eventuali guardare le reference a fine elaborato.
+Clicchiamo dunque sul tab della sidebar di sinistra su \textit{Users}.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_11.png}
+\end{center}
+
+Clicchiamo su \textit{Add user}.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_12.png}
+\end{center}
+
+Assegniamo un username al nostro utente e clicchiamo su \textit{Save}. La pagina sarà dunque aggiornata con nuovi tab ed opzioni, clicchiamo dunque sul tab \textit{Role Mappings}.
+Selezioniamo dunque il client, per il quale vogliamo assegnare un ruolo al nostro utente, dalla select di \textit{Client Roles} e clicchiamo su \textit{Add selected} per assegnargli il ruolo.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_13.png}
+\end{center}
+
+Prima di passare allo step successivo, assegniamo una password cliccando sul tab \textit{Credentials} (è possibile assegnare una password temporanea che l'utente potrà cambiare una volta effettuato il primo login).
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_14.png}
+\end{center}
+
 \subsection{Dimostrazione autenticazione}
+
+Completati gli step precedenti, adesso siamo pronti ad effettuare un test sull'autenticazione dell'utente.
+In questo caso, prenderemo in esame, il microservizio \textit{Sample}. Andando sullo Swagger del relativo microservizio, effettuando una GET su \texttt{/sample/samples}, la richiesta ritornerà \texttt{401 Unauthorized}:
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_15.png}
+\end{center}
+
+Il blocco dell'API funziona correttamente, infatti nelle properties del microservizio sono state settate delle security constraint relative al path \texttt{/sample/*}.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_16.png}
+\end{center}
+
+Secondo i security constraint, infatti, le API \texttt{/sample/*} possono essere utilizzate solo da un utente che ha assegnato il ruolo \texttt{role-sample} relativo al client \texttt{sample}.
+
+Bisogna effettuare una richiesta a Keycloak con i parametri del nostro utente per avere come ritorno il token \texttt{jwt}.
+
+\begin{verbatim}
+    curl --location --request POST 
+    'http://localhost:8180/auth/realms/Biobank/protocol/openid-connect/token' \
+    --header 'Content-Type: application/x-www-form-urlencoded' \
+    --data-urlencode 'client_id=sample' \
+    --data-urlencode 'username=user-test' \
+    --data-urlencode 'password=password' \
+    --data-urlencode 'grant_type=password'
+\end{verbatim}
+
+Su \texttt{jwt.io} è possibile visualizzare tutte le informazioni contenute nel token, tra cui il realm di appartenenza ed i ruoli dell'utente:
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_17.png}
+\end{center}
+
+Effettuando la medesima chiamata, autenticandoci con token JWT precedentemente generato (in questo caso utilizzeremo POSTMAN), la chiamata andrà a buon fine.
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_18.png}
+\end{center}
+
+Utilizzando un JWT relativo ad un utente con altri ruoli assegnati, ma non quello richiesto dall'API, il messaggio di ritorno è il seguente:
+
+\begin{center}
+    \includegraphics[width=0.80\linewidth]{keycloak_19.png}
+\end{center}
+
+Si nota che i messaggi di ritorno possono essere personalizzati in base alle proprie esigenze, in questo caso, è stato ritenuto opprotuno considerare solo il caso base.
+
+\subsection{Conclusione}
+
+La configurazione dell'intero realm \texttt{Biobank} sarà importata automaticamente all'avvio di Keycloak. Oltre ai parametri di configurazione \texttt{application.yaml} è stato necessario importare la classe
+\texttt{KeycloakConfig} ed estendere la \texttt{SecurityConfig} con il \texttt{KeycloakWebSecurityConfigurerAdapter}, oltre ad importare la seguente dipendenza sul \texttt{pom.xml}
+
+\begin{verbatim}
+    <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-spring-boot-starter</artifactId>
+    </dependency>
+\end{verbatim}
+
+Per ulteriori approfondimenti sugli eventuali utilizzi sono state citate le pagine di documentazione nelle reference a fine relazione.
 
 \pagebreak
 
