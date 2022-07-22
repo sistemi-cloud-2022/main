@@ -264,20 +264,38 @@ Per ulteriori approfondimenti sugli eventuali utilizzi sono state citate le pagi
 
 \section{Git actions}
 
-Successivamente è stato ritenuto opportuno ai fini di un buon flusso di implementazione integrare delle git actions nei vari repository. In particolare:
-	- deploy con maven
-	- push dell’immagine in un registry di docker in modo tale da poter effettuare i test su minikube prima del deploy su AWS
+Successivamente, è stato ritenuto opportuno ai fini di un buon flusso di sviluppo, integrare delle \textit{git actions} nei vari repository.
+Nel dettaglio, è stata implementata una action, denominata \textbf{Create action build and push on Docker Hub} su ogni repo di ogni microservizio, che entra in azione ogni volta che viene effettuato un commit nel 
+branch \texttt{main} che, in ordine:
 
-Link della repository https://hub.docker.com/repositories
+\begin{enumerate}
+    \item Effettua la build del microservizio;
+    \item Crea l'immagine docker del microservizio e la pusha sul repository GitHub
+\end{enumerate}
+
+TODO: Aggiungi DEscrizione Actions AWS/K8S
+
 
 \section{Kubernetes}
 
-Una volta messe a disposizione le immagini, è stato trovato opportuno iniziare ad utilizzare kubernetes [… inserisci motiviazioni]. È stato trovato efficiente ed opportuno utilizzare k8s utilizzando immagini docker.
+Nonostante aver organizzato il flusso di sviluppo, ed in parte quello di deploy, in un ambiente di produzione, è necessario garantire che non si verifichino interruzioni
+dei servizi, per esempio, causati dall'interruzione di un container o da un aggiornamento. Nel primo caso, ad esempio, è necessario avviare un nuovo
+container. Kubernetes ti fornisce un framework per far funzionare i sistemi distribuiti in modo resiliente, ad esempio, gestendo
+tutti quei comportamenti in maniera automatica. Kubernetes si occupa della scalabilità, failover, distribuzione. Tra i servizi forniti troviamo:
+
+\begin{enumerate} 
+    \item \textbf{Scoperta dei servizi e bilanciamento del carico} k8s può esporre un container usando un nome DNS o il suo indirizzo IP. Se il traffico verso un container è alto, Kubernetes è in grado di distribuire il traffico su più container in modo che il servizio rimanga stabile.
+    \item \textbf{Orchestrazione dello storage} permette di montare automaticamente un sistema di archiviazione di vostra scelta, come per esempio storage locale, dischi forniti da cloud pubblici, e altro ancora.
+    \item \textbf{Rollout e rollback automatizzati} può essere utilizzato per descrivere lo stato desiderato per i propri container e si occuperà inoltre di cambiare lo stato attuale per raggiungere quello desiderato ad una velocità controllata. Per esempio, puoi automatizzare Kubernetes per creare nuovi container per il tuo servizio, rimuovere i container esistenti e adattare le loro risorse a quelle richieste dal nuovo container.
+    \item \textbf{Ottimizzazione dei carichi} Fornisci a Kubernetes un cluster di nodi per eseguire i container. Puoi istruire Kubernetes su quanta CPU e memoria (RAM) ha bisogno ogni singolo container. Kubernetes allocherà i container sui nodi per massimizzare l'uso delle risorse a disposizione.
+    \item \textbf{Self-healing} Kubernetes riavvia i container che si bloccano, sostituisce container, termina i container che non rispondono agli health checks, e evita di far arrivare traffico ai container che non sono ancora pronti per rispondere correttamente.
+    \item \textbf{Gestione di informazioni sensibili e della configurazione} Kubernetes consente di memorizzare e gestire informazioni sensibili, come le password, i token OAuth e le chiavi SSH. Puoi distribuire e aggiornare le informazioni sensibili e la configurazione dell'applicazione senza dover ricostruire le immagini dei container e senza svelare le informazioni sensibili nella configurazione del tuo sistema.
+\end{enumerate}
 
 
-Per prima cosa è stata dedicata attenzione alla creazione del db. Infatti, come accadeva nel docker-compose, l’obbiettivo sarebbe quello di istanziare dei db, indipendenti dal be, con dei dati pre caricati. L’opzione migliore è stata quella di montare un volume … download dei dati raw da git (in modo da poter facilmente prendere le eventuali modifiche successive) …
+Per prima cosa, è stata dedicata attenzione alla creazione del db. Infatti, come accadeva nel docker-compose, l’obbiettivo è quello di istanziare dei db, indipendenti dal be, con dei dati pre caricati. L’opzione migliore è stata quella di montare un volume … download dei dati raw da git (in modo da poter facilmente prendere le eventuali modifiche successive) …
 
-È stato creato un file di configurazione unico, in quanto le secret sono tutte uguali …
+% È stato creato un file di configurazione unico, in quanto le secret sono tutte uguali TODO: …
 
 
 \begin{thebibliography}{4}
