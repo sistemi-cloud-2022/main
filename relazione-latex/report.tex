@@ -1,25 +1,17 @@
-\documentclass[11pt]{article}
+\documentclass{article}
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 \usepackage{graphicx}
-\graphicspath{ {./images/} }
 
-\usepackage{algorithm}
-\usepackage{algpseudocode}
 \usepackage{hyperref}
 
 \usepackage{sectsty}
-\usepackage{graphicx}
-\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\graphicspath{ {./images/} }
 
-% Margins
-\topmargin=-0.45in
-\evensidemargin=0in
-\oddsidemargin=0in
-\textwidth=6.5in
-\textheight=9.0in
-\headsep=0.25in
+\input{structure.tex} % Include the file specifying the document structure and custom commands
 
-% norm function
-\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
 
 \title{ %
 \includegraphics[width=0.4\textwidth]{UniCT-Logo-Nero}~\\
@@ -29,96 +21,212 @@ BiobankSPREC Microservices \\
 \author{ Danilo Leocata - 1000022576 \\ Docenti: Giuseppe Pappalardo, Andrea Fornaia}
 \date{\today}
 
+%----------------------------------------------------------------------------------------
+
 \begin{document}
 
-\maketitle	
+\maketitle % Print the title
+
 \pagebreak
 
-%--Paper--
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+
 
 \section{Introduzione}
 
-È stato preso in esame un progetto a microservizi .... (inserisci di cosa parla). L'intero progetto è disponibile al seguente link GitHub:
-https://github.com/sistemi-cloud-2022/
+È stato preso in esame un progetto a microservizi (inserisci di cosa parla) realizzato precedentemente dal collega.
+L'intero progetto è disponibile al seguente link GitHub: (link progetto vecchio).
 
 \begin{center}
-    inserisci schema ER
+    \includegraphics{architettura.png}
+    \captionof{figure}{Architettura iniziale}
 \end{center}
 
-Dopo una accurata analisi le possibili migliorie sarebbero quelle di:
+
+È stato trovato più opportuno, iniziare ad effettuare un primo refactoring del progetto.
+In particolare è stata prevista la suddivisione dei microservizi, ed i relativi database, in repository separate in modo da scindere il deploy di database e relativo microservizio associato.
+Tutte le configurazioni (come quella di Keycloak, ad esempio) e le documentazioni generali sono state inserite all’interno della repository \texttt{main}. Per agevolare lo sviluppo ed i test sono stati implementati due script bash, nel dettaglio:
 
 \begin{enumerate}
-    \item {
-        Tutti i microservizi sono contenuti in un unica repository: è stato trovato opportuno (inserisci motivazioni) creare una repository per ogni microservizio
-        in modo da mantenere separate le modifiche al db.
-    }
-
-    \item {
-        Per ogni repository saranno presenti tre branch: test, prod, dev. Ogni modifica nel branch \texttt{prod} e \texttt{test} builderà una immagine docker ed una volta
-        che verrà caricata su un registry (?) docker (corretto ? ha senso ?)
-    }
-
-    \item {
-        Il servizio di autenticazione sarà sostituito da Keycloak
-    }
-
-    \item {
-        Verrà utilizzato Kubernetes come orchestratore dei container [....]
-    }
-    
-    \item {
-        Camunda ?
-    }
-
-    \item {
-        Ansible lo possiamo integrare ? Ha senso ? 
-    }
-
-    \item {
-        Kafka ha senso integrarlo ? 
-    }
-    
-
+    \item {\texttt{setup-dev.sh}: crea una cartella \texttt{development}, al cui interno effettua i clone delle repository, prepara i file in modo da renderli eseguibili per il \texttt{docker-compose}, effettua la build del microservizi con \texttt{maven} e
+        copia tutti i file necessari per la configurazione  dentro la cartella \texttt{imports}}
+    \item {\texttt{update-repo.sh}: script che effettua pull del \texttt{main} in tutti i branch e ne effettua le build}
 \end{enumerate}
 
-Per prima cosa è stata dunque creata una repository per ogni microservizio. Dopo un'accurata analisi è stato trovato tenere separato
-il database dal microservizio. [ inserisci motivazioni ???? ]. Sono stati realizzati degli script per agevolare il deploy, in particolare nel repository \texttt{main} sono stati
-creati due script
+In generale, sono stati effettuati i seguenti miglioramenti su ogni microservizio:
 
 \begin{enumerate}
-    \item \texttt{setup-dev.sh}: crea una cartella \texttt{development}, effettuando un clone del repository, prepara i file in modo da renderli eseguibili per il docker compose (builda anche le immagini). Inoltre copia
-        tutti i file a livello di configurazione all'interno della cartella \texttt{imports} (a partire dalle varie repository)
-    \item \texttt{update-repo.sh}: script che effettua pull di tutti i branch per sincronizzarne le modifiche
+    \item {Il microservizio di authentication è stato sostituito in favore di Keycloak; }
+    \item {Sono stati estratti, dai rispettivi container docker, le tabelle ed i dati su file \texttt{.sql} (inizialmente il db veniva inizializzato a run-time durante l'avvio del microservizio);}
+    \item {I file \texttt{pom.xml} sono stati stato revisionati ed aggiornati;}
+    \item {Il formato delle API è stato cambiato da \textit{camelCase} ad \textit{hypenate}}
+    \item {I file \texttt{application.properties} sono stati stato convertiti in formato \texttt{.yml} e splittato in \texttt{dev}, per lo sviluppo, e \texttt{prod} per il deploy.}
+    \item {Sono state implementate le \textbf{Git Actions} }
+    \item {Orchestrazione dei microservizi con \textbf{Kubernetes}}
 \end{enumerate}
 
 
 \section{Keycloak}
 
-Keycloak è un [....] . Sono stati creati dei client per ogni client e ad ognuno di questi avrà un ruolo associato.
-In questo modo ogni utente dovrà avere il ruolo del client associato per poter effettuare la richiesta.
+Il primo step è stato quello di sostituire il microservizio di autenticazione con Keyacloak. Keycloak è un
+prodotto software open source che abilita il Single Sign-On (IdP) con Identity Management e
+Access Management per applicazioni e servizi moderni. Questo software è scritto in Java e
+supporta i protocolli di federazione delle identità per impostazione predefinita SAML v2 e
+OpenID Connect (OIDC) / OAuth2. Lo scopo dello strumento è quello di facilitare la protezione
+di applicazioni e servizi con poca o nessuna crittografia. Un IdP consente a un'applicazione
+(Service Provider) di delegare la propria autenticazione %%(\href{https://www.keycloak.org}{pagina ufficiale}).
+
+Si riassumono brevemente alcuni dei concetti principali:
+
+\begin{enumerate}
+    \item {\textbf{Users}: entità che sono in grado di accedere al tuo sistema. Possono avere attributi associati a se stessi come e-mail, nome utente, indirizzo, numero di telefono e giorno di nascita. È possibile assegnare loro l'appartenenza a un gruppo e assegnare loro ruoli specifici.}
+    \item {\textbf{Roles}: identificano un tipo o una categoria di utente: sono tutti ruoli tipici che possono esistere in un'organizzazione. Le applicazioni spesso assegnano l'accesso e le autorizzazioni a ruoli specifici piuttosto che a singoli utenti, poiché la gestione degli utenti può essere difficile da gestire. }
+    \item {\textbf{User role mapping} Una mappatura dei ruoli utente definisce una mappatura tra un ruolo e un utente. Un utente può essere associato a zero o più ruoli. Queste informazioni sulla mappatura dei ruoli possono essere incapsulate in token e asserzioni in modo che le applicazioni possano decidere le autorizzazioni di accesso su varie risorse che gestiscono.}
+    \item {\textbf{Realms} un realm gestisce un insieme di utenti, credenziali, ruoli e gruppi. Un utente appartiene e accede a un realm che sono isolati l'uno dall'altro e possono solo gestire e autenticare gli utenti che controllano.}
+    \item {\textbf{Clients}: i client sono entità che possono richiedere a Keycloak di autenticare un utente. Nella maggior parte dei casi, i client sono applicazioni e servizi che desiderano utilizzare Keycloak per proteggersi e fornire una soluzione single sign-on. I client possono anche essere entità che desiderano semplicemente richiedere informazioni sull'identità o un token di accesso in modo da poter invocare in modo sicuro altri servizi sulla rete protetti da Keycloak.}
+    \item {\textbf{Client scope}: quando un client viene registrato, è necessario definire i mappatori di protocollo e i mapping dell'ambito del ruolo per quel client. Spesso è utile memorizzare un ambito client per semplificare la creazione di nuovi client condividendo alcune impostazioni comuni, è utile anche per richiedere che alcuni ruoli, ad esempio, siano condizionalmente basati sul valore del parametro scope}
+    \item {\textbf{Client role}: i clients possono definire ruoli specifici.}
+\end{enumerate}
+
+Brevemente, di seguito, saranno spiegati di seguito i passi necessari per la configurazione di Keycloak
+
+\subsection{Creazione di un realm}
+
+\subsection{Creazione di un client}
+
+\subsection{Creazione di un ruolo}
+
+\subsection{Dimostrazione autenticazione}
+
+\pagebreak
+
+\section{Git actions}
+
+Successivamente è stato ritenuto opportuno ai fini di un buon flusso di implementazione integrare delle git actions nei vari repository. In particolare:
+	- deploy con maven
+	- push dell’immagine in un registry di docker in modo tale da poter effettuare i test su minikube prima del deploy su AWS
+
+Link della repository https://hub.docker.com/repositories
+
+\section{Kubernetes}
+
+Una volta messe a disposizione le immagini, è stato trovato opportuno iniziare ad utilizzare kubernetes [… inserisci motiviazioni]. È stato trovato efficiente ed opportuno utilizzare k8s utilizzando immagini docker.
+
+
+Per prima cosa è stata dedicata attenzione alla creazione del db. Infatti, come accadeva nel docker-compose, l’obbiettivo sarebbe quello di istanziare dei db, indipendenti dal be, con dei dati pre caricati. L’opzione migliore è stata quella di montare un volume … download dei dati raw da git (in modo da poter facilmente prendere le eventuali modifiche successive) …
+
+È stato creato un file di configurazione unico, in quanto le secret sono tutte uguali …
+
+
+\begin{thebibliography}{4}
+
+    \bibitem{1} \href{https://www.keycloak.org/docs/11.0/getting_started/}{Getting started with Keycloak}
+    \bibitem{2} \href{https://www.keycloak.org/docs/latest/server_installation/}{Keycloak server installation}
+    \bibitem{3} \href{https://www.keycloak.org/2017/05/easily-secure-your-spring-boot.html}{Easily secure Spring Boot app with Keycloak}
+    \bibitem{4} \href{https://www.baeldung.com/spring-boot-keycloak}{Spring boot with keycloak}
+
+\end{thebibliography}
 
 
 \pagebreak
 
-% \begin{thebibliography}{4}
 
-% \bibitem{1} \href{https://pytorch.org/vision/stable/models.html}{Models and Pre-trained Weights}
-% \bibitem{2} \href{
-%     https://pytorch.org/docs/stable/generated/torch.nn.TripletMarginLoss.html
-% }{Triplet Margin Loss}
-% \bibitem{2} \href{
-%     https://pytorch.org/docs/stable/generated/torch.nn.TripletMarginWithDistanceLoss.html#torch.nn.TripletMarginWithDistanceLoss
-% }{Triplet Margin With Distance Loss}
-% \bibitem{4} \href{
-%     https://pytorch.org/docs/stable/generated/torch.nn.PairwiseDistance.html
-% }{PairwiseDistance}
+% ---- Esempi utili di alcune modifiche ------
 
-% https://openaccess.thecvf.com/content_CVPR_2020/papers/Ko_Embedding_Expansion_Augmentation_in_Embedding_Space_for_Deep_Metric_Learning_CVPR_2020_paper.pdf
+% \subsection{Theoretical viewpoint}
 
-% \end{thebibliography}
+% Maecenas consectetur metus at tellus finibus condimentum. Proin arcu lectus, ultrices non tincidunt et, tincidunt ut quam. Integer luctus posuere est, non maximus ante dignissim quis. Nunc a cursus erat. Curabitur suscipit nibh in tincidunt sagittis. Nam malesuada vestibulum quam id gravida. Proin ut dapibus velit. Vestibulum eget quam quis ipsum semper convallis. Duis consectetur nibh ac diam dignissim, id condimentum enim dictum. Nam aliquet ligula eu magna pellentesque, nec sagittis leo lobortis. Aenean tincidunt dignissim egestas. Morbi efficitur risus ante, id tincidunt odio pulvinar vitae.
 
+% Curabitur tempus hendrerit nulla. Donec faucibus lobortis nibh pharetra sagittis. Sed magna sem, posuere eget sem vitae, finibus consequat libero. Cras aliquet sagittis erat ut semper. Aenean vel enim ipsum. Fusce ut felis at eros sagittis bibendum mollis lobortis libero. Donec laoreet nisl vel risus lacinia elementum non nec lacus. Nullam luctus, nulla volutpat ultricies ultrices, quam massa placerat augue, ut fringilla urna lectus nec nibh. Vestibulum efficitur condimentum orci a semper. Pellentesque ut metus pretium lacus maximus semper. Sed tellus augue, consectetur rhoncus eleifend vel, imperdiet nec turpis. Nulla ligula ante, malesuada quis orci a, ultricies blandit elit.
 
-\pagebreak
-%--/Paper--
+% % Numbered question, with subquestions in an enumerate environment
+% \begin{question}
+% 	Quisque ullamcorper placerat ipsum. Cras nibh. Morbi vel justo vitae lacus tincidunt ultrices. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+
+% 	% Subquestions numbered with letters
+% 	\begin{enumerate}[(a)]
+% 		\item Do this.
+% 		\item Do that.
+% 		\item Do something else.
+% 	\end{enumerate}
+% \end{question}
+	
+% %------------------------------------------------
+
+% \subsection{Algorithmic issues}
+
+% In malesuada ullamcorper urna, sed dapibus diam sollicitudin non. Donec elit odio, accumsan ac nisl a, tempor imperdiet eros. Donec porta tortor eu risus consequat, a pharetra tortor tristique. Morbi sit amet laoreet erat. Morbi et luctus diam, quis porta ipsum. Quisque libero dolor, suscipit id facilisis eget, sodales volutpat dolor. Nullam vulputate interdum aliquam. Mauris id convallis erat, ut vehicula neque. Sed auctor nibh et elit fringilla, nec ultricies dui sollicitudin. Vestibulum vestibulum luctus metus venenatis facilisis. Suspendisse iaculis augue at vehicula ornare. Sed vel eros ut velit fermentum porttitor sed sed massa. Fusce venenatis, metus a rutrum sagittis, enim ex maximus velit, id semper nisi velit eu purus.
+
+% \begin{center}
+% 	\begin{minipage}{0.5\linewidth} % Adjust the minipage width to accomodate for the length of algorithm lines
+% 		\begin{algorithm}[H]
+% 			\KwIn{$(a, b)$, two floating-point numbers}  % Algorithm inputs
+% 			\KwResult{$(c, d)$, such that $a+b = c + d$} % Algorithm outputs/results
+% 			\medskip
+% 			\If{$\vert b\vert > \vert a\vert$}{
+% 				exchange $a$ and $b$ \;
+% 			}
+% 			$c \leftarrow a + b$ \;
+% 			$z \leftarrow c - a$ \;
+% 			$d \leftarrow b - z$ \;
+% 			{\bf return} $(c,d)$ \;
+% 			\caption{\texttt{FastTwoSum}} % Algorithm name
+% 			\label{alg:fastTwoSum}   % optional label to refer to
+% 		\end{algorithm}
+% 	\end{minipage}
+% \end{center}
+
+% Fusce varius orci ac magna dapibus porttitor. In tempor leo a neque bibendum sollicitudin. Nulla pretium fermentum nisi, eget sodales magna facilisis eu. Praesent aliquet nulla ut bibendum lacinia. Donec vel mauris vulputate, commodo ligula ut, egestas orci. Suspendisse commodo odio sed hendrerit lobortis. Donec finibus eros erat, vel ornare enim mattis et.
+
+% % Numbered question, with an optional title
+% \begin{question}[\itshape (with optional title)]
+% 	In congue risus leo, in gravida enim viverra id. Donec eros mauris, bibendum vel dui at, tempor commodo augue. In vel lobortis lacus. Nam ornare ullamcorper mauris vel molestie. Maecenas vehicula ornare turpis, vitae fringilla orci consectetur vel. Nam pulvinar justo nec neque egestas tristique. Donec ac dolor at libero congue varius sed vitae lectus. Donec et tristique nulla, sit amet scelerisque orci. Maecenas a vestibulum lectus, vitae gravida nulla. Proin eget volutpat orci. Morbi eu aliquet turpis. Vivamus molestie urna quis tempor tristique. Proin hendrerit sem nec tempor sollicitudin.
+% \end{question}
+
+% Mauris interdum porttitor fringilla. Proin tincidunt sodales leo at ornare. Donec tempus magna non mauris gravida luctus. Cras vitae arcu vitae mauris eleifend scelerisque. Nam sem sapien, vulputate nec felis eu, blandit convallis risus. Pellentesque sollicitudin venenatis tincidunt. In et ipsum libero. Nullam tempor ligula a massa convallis pellentesque.
+
+% %----------------------------------------------------------------------------------------
+% %	PROBLEM 2
+% %----------------------------------------------------------------------------------------
+
+% \section{Implementation}
+
+% Proin lobortis efficitur dictum. Pellentesque vitae pharetra eros, quis dignissim magna. Sed tellus leo, semper non vestibulum vel, tincidunt eu mi. Aenean pretium ut velit sed facilisis. Ut placerat urna facilisis dolor suscipit vehicula. Ut ut auctor nunc. Nulla non massa eros. Proin rhoncus arcu odio, eu lobortis metus sollicitudin eu. Duis maximus ex dui, id bibendum diam dignissim id. Aliquam quis lorem lorem. Phasellus sagittis aliquet dolor, vulputate cursus dolor convallis vel. Suspendisse eu tellus feugiat, bibendum lectus quis, fermentum nunc. Nunc euismod condimentum magna nec bibendum. Curabitur elementum nibh eu sem cursus, eu aliquam leo rutrum. Sed bibendum augue sit amet pharetra ullamcorper. Aenean congue sit amet tortor vitae feugiat.
+
+% In congue risus leo, in gravida enim viverra id. Donec eros mauris, bibendum vel dui at, tempor commodo augue. In vel lobortis lacus. Nam ornare ullamcorper mauris vel molestie. Maecenas vehicula ornare turpis, vitae fringilla orci consectetur vel. Nam pulvinar justo nec neque egestas tristique. Donec ac dolor at libero congue varius sed vitae lectus. Donec et tristique nulla, sit amet scelerisque orci. Maecenas a vestibulum lectus, vitae gravida nulla. Proin eget volutpat orci. Morbi eu aliquet turpis. Vivamus molestie urna quis tempor tristique. Proin hendrerit sem nec tempor sollicitudin.
+
+% % File contents
+% \begin{file}[hello.py]
+% \begin{lstlisting}[language=Python]
+% #! /usr/bin/python
+
+% import sys
+% sys.stdout.write("Hello World!\n")
+% \end{lstlisting}
+% \end{file}
+
+% Fusce eleifend porttitor arcu, id accumsan elit pharetra eget. Mauris luctus velit sit amet est sodales rhoncus. Donec cursus suscipit justo, sed tristique ipsum fermentum nec. Ut tortor ex, ullamcorper varius congue in, efficitur a tellus. Vivamus ut rutrum nisi. Phasellus sit amet enim efficitur, aliquam nulla id, lacinia mauris. Quisque viverra libero ac magna maximus efficitur. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum mollis eros in tellus fermentum, vitae tristique justo finibus. Sed quis vehicula nibh. Etiam nulla justo, pellentesque id sapien at, semper aliquam arcu. Integer at commodo arcu. Quisque dapibus ut lacus eget vulputate.
+
+% % Command-line "screenshot"
+% \begin{commandline}
+% 	\begin{verbatim}
+% 		$ chmod +x hello.py
+% 		$ ./hello.py
+
+% 		Hello World!
+% 	\end{verbatim}
+% \end{commandline}
+
+% Vestibulum sodales orci a nisi interdum tristique. In dictum vehicula dui, eget bibendum purus elementum eu. Pellentesque lobortis mattis mauris, non feugiat dolor vulputate a. Cras porttitor dapibus lacus at pulvinar. Praesent eu nunc et libero porttitor malesuada tempus quis massa. Aenean cursus ipsum a velit ultricies sagittis. Sed non leo ullamcorper, suscipit massa ut, pulvinar erat. Aliquam erat volutpat. Nulla non lacus vitae mi placerat tincidunt et ac diam. Aliquam tincidunt augue sem, ut vestibulum est volutpat eget. Suspendisse potenti. Integer condimentum, risus nec maximus elementum, lacus purus porta arcu, at ultrices diam nisl eget urna. Curabitur sollicitudin diam quis sollicitudin varius. Ut porta erat ornare laoreet euismod. In tincidunt purus dui, nec egestas dui convallis non. In vestibulum ipsum in dictum scelerisque.
+
+% % Warning text, with a custom title
+% \begin{warn}[Notice:]
+%   In congue risus leo, in gravida enim viverra id. Donec eros mauris, bibendum vel dui at, tempor commodo augue. In vel lobortis lacus. Nam ornare ullamcorper mauris vel molestie. Maecenas vehicula ornare turpis, vitae fringilla orci consectetur vel. Nam pulvinar justo nec neque egestas tristique. Donec ac dolor at libero congue varius sed vitae lectus. Donec et tristique nulla, sit amet scelerisque orci. Maecenas a vestibulum lectus, vitae gravida nulla. Proin eget volutpat orci. Morbi eu aliquet turpis. Vivamus molestie urna quis tempor tristique. Proin hendrerit sem nec tempor sollicitudin.
+% \end{warn}
+
+%----------------------------------------------------------------------------------------
 
 \end{document}
