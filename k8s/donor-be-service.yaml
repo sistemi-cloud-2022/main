@@ -4,8 +4,8 @@ metadata:
     name: donor-be-service
     # namespace: donor
 spec:
-    type: ClusterIP # eventualmente usa loadBalancer per prendere l'IP metto il loadbalancer e quindi lo chiamo da usalo solo keycloak
+    type: LoadBalancer # eventualmente usa loadBalancer per prendere l'IP metto il loadbalancer e quindi lo chiamo da usalo solo keycloak
     ports:
-    - port: 9095 
+    - port: 9095
     selector:
         app: donor-be
