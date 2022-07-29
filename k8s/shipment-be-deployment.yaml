@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: shipment-be
-  namespace: shipment # è lo stesso namespace da utilizzare nei service
+  # namespace: shipment # è lo stesso namespace da utilizzare nei service
   labels:
     app: shipment-be
 spec:
@@ -24,10 +24,14 @@ spec:
           ports:
           - containerPort: 9091
           env:
+          - name: 'SPRING_DATASOURCE_USERNAME'
+            value: 'admin'
+          - name: 'SPRING_DATASOURCE_PASSWORD'
+            value: 'admin'
           - name: 'SERVER_PORT'
             value: '9091'
-          - name: 'MYSQL_HOST'
-            value: 'shipment_db'
+          - name: 'SPRING_DATASOURCE_URL'
+            value: 'jdbc:mysql://10.1.0.140:3306/shipment_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
 
 
 # TODO:

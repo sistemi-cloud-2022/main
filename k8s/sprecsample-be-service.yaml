@@ -2,15 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
     name: sprecsample-be-service
-    namespace: sprecsample
+    # namespace: sprecsample
 spec:
-    type: ClusterIP # eventualmente usa loadBalancer per prendere l'IP metto il loadbalancer e quindi lo chiamo da usalo solo keycloak
+    type: LoadBalancer # eventualmente usa loadBalancer per prendere l'IP metto il loadbalancer e quindi lo chiamo da usalo solo keycloak
     ports:
     - port: 9094
     selector:
         app: sprecsample-be
 
-      # TODO:
-      # APP_SHIPMENTSERVICE: "http://shipmentService:9091"
-      # APP_BIOBANKSERVICE: "http://biobankService:9093"
-      # APP_DONORSERVICE: "http://donorService:9095"
+        # TODO:
+        # APP_SHIPMENTSERVICE: "http://shipmentService:9091"
+        # APP_BIOBANKSERVICE: "http://biobankService:9093"
+        # APP_DONORSERVICE: "http://donorService:9095"
