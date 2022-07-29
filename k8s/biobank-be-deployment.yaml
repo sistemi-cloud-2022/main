@@ -1,0 +1,30 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: biobank-be
+  namespace: biobank # è lo stesso namespace da utilizzare nei service
+  labels:
+    app: biobank-be
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: biobank-be
+  template:
+    metadata:
+      labels:
+        app: biobank-be
+    spec:
+      # necessario se immagini private
+      # imagePullSecrets:
+      #   - name: acr-secret-cs
+      containers:
+        - name: biobank-be
+          image: khalld/biobank:latest
+          ports:
+          - containerPort: 9095
+          env:
+          - name: 'SERVER_PORT'
+            value: '9095'
+          - name: 'MYSQL_HOST'
+            value: 'biobank_db'

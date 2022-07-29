@@ -1,0 +1,34 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: sample-be
+  namespace: sample # è lo stesso namespace da utilizzare nei service
+  labels:
+    app: sample-be
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-be
+  template:
+    metadata:
+      labels:
+        app: sample-be
+    spec:
+      # necessario se immagini private
+      # imagePullSecrets:
+      #   - name: acr-secret-cs
+      containers:
+        - name: sample-be
+          image: khalld/sample:latest
+          ports:
+          - containerPort: 9095
+          env:
+          - name: 'SERVER_PORT'
+            value: '9095'
+          - name: 'MYSQL_HOST'
+            value: 'sample_db'
+      # TODO:
+      # APP_SHIPMENTSERVICE: "http://shipmentService:9091"
+      # APP_BIOBANKSERVICE: "http://biobankService:9093"
+      # APP_DONORSERVICE: "http://donorService:9095"

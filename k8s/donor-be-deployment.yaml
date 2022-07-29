@@ -1,0 +1,30 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: donor-be
+  # namespace: donor # è lo stesso namespace da utilizzare nei service
+  labels:
+    app: donor-be
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: donor-be
+  template:
+    metadata:
+      labels:
+        app: donor-be
+    spec:
+      # necessario se immagini private
+      # imagePullSecrets:
+      #   - name: acr-secret-cs
+      containers:
+        - name: donor-be
+          image: khalld/donor:latest
+          ports:
+          - containerPort: 9095
+          env:
+          - name: 'SERVER_PORT'
+            value: '9095'
+          - name: 'MYSQL_HOST'
+            value: 'donor-mysql-deployment-79d74979f9-znbsh'

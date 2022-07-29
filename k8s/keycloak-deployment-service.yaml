@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # namespace: keycloak
+  labels:
+    app: keycloak-deployment
+  name: keycloak-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak-deployment
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: keycloak-deployment
+    spec:
+      containers:
+      - image: jboss/keycloak:16.1.1
+        name: keycloak
+        # imagePullPolicy: Never
+        ports:
+          # - name: http
+          - containerPort: 8180
+        env:
+          - name: KEYCLOAK_USER
+            value: admin
+          - name: KEYCLOAK_PASSWORD
+            value: admin
+          - name: KEYCLOAK_IMPORT
+            value: /import/realm.json
+          - name: DB_VENDOR
+            value: MYSQL
+          - name: DB_ADDR
+            value: keycloak_db
+          - name: DB_DATABASE
+            value: keycloak
+          - name: DB_USER
+            value: keycloak              
+          - name: DB_PASSWORD
+            value: password                     
+        volumeMounts:
+          - name: keycloak-volume
+            mountPath: /import
+        readinessProbe:
+          httpGet:
+            path: /auth/realms/master
+            port: 8180
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+        resources: {}
+      volumes:
+        - name: keycloak-volume
+          configMap:
+            name: keycloak-configmap
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # namespace: keycloak
+  name: keycloak-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: keycloak-deployment
+  ports:
+    - protocol: TCP
+      port: 8180
+      targetPort: 8180

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 kubectl delete pods --all
 kubectl delete svc --all
 kubectl delete deployment --all
