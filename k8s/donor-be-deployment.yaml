@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: donor-be
-  # namespace: donor # è lo stesso namespace da utilizzare nei service
+  namespace: donor # è lo stesso namespace da utilizzare nei service
   labels:
     app: donor-be
 spec:
@@ -31,7 +31,10 @@ spec:
             value: 'admin'
           - name: 'SERVER_PORT'
             value: '9095'
-          - name: 'SPRING_DATASOURCE_URL'
-            # TODO: devi mettere l'IP qua dentro del POD dove runna il database !!!
-            value: 'jdbc:mysql://10.1.0.134:3306/donor_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
-            # value: 'jdbc:mysql://10.1.0.96:3306/donor_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
+          - name: 'MYSQL_HOST'
+          #   # TODO: devi mettere l'IP qua dentro del POD dove runna il database !!! (anche per aws)
+            value: '192.168.50.75'
+          # sovrascrivere l'intero record del db
+          # - name: 'SPRING_DATASOURCE_URL'
+          #   value: 'jdbc:mysql://192.168.50.75:3306/donor_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
+          #   # value: 'jdbc:mysql://10.1.0.96:3306/donor_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
