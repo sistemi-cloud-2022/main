@@ -14,6 +14,7 @@ services:
         MYSQL_DATABASE: keycloak
         MYSQL_USER: keycloak
         MYSQL_PASSWORD: password
+
   keycloak:
       image: jboss/keycloak:16.1.1
       # build:
@@ -48,8 +49,10 @@ services:
     environment:
       SERVER_PORT: 9091
       MYSQL_HOST: shipment_db
-      APP_SAMPLESERVICE: "http://sampleService:9092"
-      APP_BIOBANKSERVICE: "http://biobankService:9093"
+      KEYCLOAK_HOST: host.docker.internal
+      # TODO: localhost ? To test
+      # SAMPLE_HOST:
+      # BIOBANK_HOST:
   
   shipment_db:
     image: mysql:5.7
@@ -63,6 +66,7 @@ services:
     volumes:
       - "./imports/shipment-db.sql:/docker-entrypoint-initdb.d/1.sql"
     container_name: shipment_db
+  
   sampleService:
     depends_on:
       - sample_db
@@ -73,10 +77,11 @@ services:
     environment:
       SERVER_PORT: 9092
       MYSQL_HOST: sample_db
-      # APP_USERSERVICE: "http://authenticationService:9090" TODO: Sostituire con keycloack?
-      APP_SHIPMENTSERVICE: "http://shipmentService:9091"
-      APP_BIOBANKSERVICE: "http://biobankService:9093"
-      APP_DONORSERVICE: "http://donorService:9095"
+      KEYCLOAK_HOST: host.docker.internal
+      # TODO: localhost ? To test
+      # SHIPMENT_HOST:
+      # BIOBANK_HOST:
+      # DONOR_HOST:
   
   sample_db:
     image: mysql:5.7
@@ -100,6 +105,7 @@ services:
     environment:
       SERVER_PORT: 9093
       MYSQL_HOST: biobank_db
+      KEYCLOAK_HOST: host.docker.internal
 
   biobank_db:
     image: mysql:5.7
@@ -123,6 +129,7 @@ services:
     environment:
       SERVER_PORT: 9095
       MYSQL_HOST: donor_db
+      KEYCLOAK_HOST: host.docker.internal
 
   donor_db:
     image: mysql:5.7
@@ -146,6 +153,7 @@ services:
     environment:
       SERVER_PORT: 9094
       MYSQL_HOST: sprecsample_db
+      KEYCLOAK_HOST: host.docker.internal
 
   sprecsample_db:
     image: mysql:5.7

@@ -292,14 +292,30 @@ tutti quei comportamenti in maniera automatica. Kubernetes si occupa della scala
     \item \textbf{Gestione di informazioni sensibili e della configurazione} Kubernetes consente di memorizzare e gestire informazioni sensibili, come le password, i token OAuth e le chiavi SSH. Puoi distribuire e aggiornare le informazioni sensibili e la configurazione dell'applicazione senza dover ricostruire le immagini dei container e senza svelare le informazioni sensibili nella configurazione del tuo sistema.
 \end{enumerate}
 
+Per prima cosa, è stata dedicata attenzione alla creazione del db. Infatti, come accadeva nel docker-compose, l’obbiettivo è quello di istanziare dei db, indipendenti dal be, con dei dati pre caricati.
+Nel dettaglio ogni Database è composto da i seguenti volumi di k8s:
+\begin{enumerate}
+    \item ConfigMap che ....
+    \item Due PersistentVolumeClaim che sono necessari per salvare il file init.db e salvare i dati del dapibus
+    \item Deployment 
+    \item Service
+\end{enumerate}
 
-Per prima cosa, è stata dedicata attenzione alla creazione del db. Infatti, come accadeva nel docker-compose, l’obbiettivo è quello di istanziare dei db, indipendenti dal be, con dei dati pre caricati. L’opzione migliore è stata quella di montare un volume … download dei dati raw da git (in modo da poter facilmente prendere le eventuali modifiche successive) …
+Mentre ogni back-end è composto da un deployment e da un service. Per ogni microservizio vorremo instanziare 2 repliche, 3 per keycloak ed 1 solamente per il database (inserisci motivazione)
 
-% È stato creato un file di configurazione unico, in quanto le secret sono tutte uguali TODO: …
+\section{AWS}
+
+La parte finale, se non la principale, del progetto è stata dedicata per il deploy su aws.
+È stato trovato opportuno utilizzare solamente il servizio di EKS [....inserisci cosa fa....]. Il deploy è stato gestito utilizzando \texttt{kubectl}, \texttt{aws cli}, \texttt{eksctl},
+nel README.md saranno citate le guide ed i comandi utilizzati per la configurazione e set-up.
+
+Per prima cosa è stato creato un cluster t2.xlarge con 4 nodi, in quanto il t2.micro risultava troppo piccolo.
+
+Sono stati individuati dei namespace di riferimento per ogni microservizio di riferimento, ovvero: \textit{biobank}, \textit{donor}, \textit{sample}, \textit{shipment}, \textit{sprecsample}.  
+È stato previsto, inoltre, un \textbf{Secret volume} necessario per settare le credenziali di accesso per ogni namespace.
 
 
 \begin{thebibliography}{4}
-
     \bibitem{1} \href{https://www.keycloak.org/docs/11.0/getting_started/}{Getting started with Keycloak}
     \bibitem{2} \href{https://www.keycloak.org/docs/latest/server_installation/}{Keycloak server installation}
     \bibitem{3} \href{https://www.keycloak.org/2017/05/easily-secure-your-spring-boot.html}{Easily secure Spring Boot app with Keycloak}
