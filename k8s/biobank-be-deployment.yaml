@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: biobank-be
-  # namespace: biobank # è lo stesso namespace da utilizzare nei service
+  namespace: biobank
   labels:
     app: biobank-be
 spec:
@@ -15,9 +15,6 @@ spec:
       labels:
         app: biobank-be
     spec:
-      # necessario se immagini private
-      # imagePullSecrets:
-      #   - name: acr-secret-cs
       containers:
         - name: biobank-be
           image: khalld/biobank:latest
@@ -31,7 +28,7 @@ spec:
               value: 'admin'
             - name: 'SERVER_PORT'
               value: '9093'
-            - name: 'SPRING_DATASOURCE_URL'
-            # TODO: devi mettere l'IP qua dentro del POD dove runna il database !!!
-              value: 'jdbc:mysql://10.1.0.138:3306/biobank_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
-            # value: 'jdbc:mysql://10.1.0.96:3306/donor_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
+            - name: 'MYSQL_HOST'
+              value: '192.168.30.43'
+          # - name: 'KEYCLOAK_HOST'
+          #   value: 'TODO:'

@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: shipment-be
-  # namespace: shipment # è lo stesso namespace da utilizzare nei service
+  namespace: shipment
   labels:
     app: shipment-be
 spec:
@@ -15,9 +15,6 @@ spec:
       labels:
         app: shipment-be
     spec:
-      # necessario se immagini private
-      # imagePullSecrets:
-      #   - name: acr-secret-cs
       containers:
         - name: shipment-be
           image: khalld/shipment:latest
@@ -30,10 +27,12 @@ spec:
             value: 'admin'
           - name: 'SERVER_PORT'
             value: '9091'
-          - name: 'SPRING_DATASOURCE_URL'
-            value: 'jdbc:mysql://10.1.0.140:3306/shipment_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
-
-
-# TODO:
-      #             APP_SAMPLESERVICE: "sample-service.shipment:9092"
-      # APP_BIOBANKSERVICE: "http://biobankService:9093"
+          - name: 'MYSQL_HOST'
+            value: '192.168.63.15'
+          # - name: 'KEYCLOAK_HOST'
+          #   value: 'TODO:'
+          # TODO:
+          - name: 'BIOBANK_HOST'
+            value: 'localhost'
+          - name: 'SAMPLE_HOST'
+            value: 'localhost'

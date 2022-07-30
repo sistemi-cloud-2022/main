@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
     name: shipment-be-service
-    # namespace: shipment
+    namespace: shipment
 spec:
     type: LoadBalancer # eventualmente usa loadBalancer per prendere l'IP metto il loadbalancer e quindi lo chiamo da usalo solo keycloak
     ports:

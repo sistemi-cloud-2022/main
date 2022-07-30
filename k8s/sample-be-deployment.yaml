@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: sample-be
-  # namespace: sample # è lo stesso namespace da utilizzare nei service
+  namespace: sample
   labels:
     app: sample-be
 spec:
@@ -15,9 +15,6 @@ spec:
       labels:
         app: sample-be
     spec:
-      # necessario se immagini private
-      # imagePullSecrets:
-      #   - name: acr-secret-cs
       containers:
         - name: sample-be
           image: khalld/sample:latest
@@ -30,12 +27,13 @@ spec:
             value: 'admin'
           - name: 'SERVER_PORT'
             value: '9092'
-          - name: 'SPRING_DATASOURCE_URL'
-            # TODO: devi mettere l'IP qua dentro del POD dove runna il database !!!
-            value: 'jdbc:mysql://10.1.0.142:3306/sample_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
-            # value: 'jdbc:mysql://10.1.0.96:3306/donor_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
-        
-          # TODO:
-          # APP_SHIPMENTSERVICE: "http://shipmentService:9091"
-          # APP_BIOBANKSERVICE: "http://biobankService:9093"
-          # APP_DONORSERVICE: "http://donorService:9095"
+          - name: 'MYSQL_HOST'
+            value: '192.168.21.13'
+          # - name: 'KEYCLOAK_HOST'
+          #   value: 'TODO:'
+          # - name: 'BIOBANK_HOST'
+          #   value: 'TODO:'
+          # - name: 'DONOR_HOST'
+          #   value: ''
+          # - name: 'SHIPMENT_HOST'
+          #   value: ''

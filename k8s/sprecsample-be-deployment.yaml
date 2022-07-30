@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: sprecsample-be
-  # namespace: sprecsample # è lo stesso namespace da utilizzare nei service
+  namespace: sprecsample
   labels:
     app: sprecsample-be
 spec:
@@ -15,9 +15,6 @@ spec:
       labels:
         app: sprecsample-be
     spec:
-      # necessario se immagini private
-      # imagePullSecrets:
-      #   - name: acr-secret-cs
       containers:
         - name: sprecsample-be
           image: khalld/sprecsample:latest
@@ -30,12 +27,7 @@ spec:
             value: 'admin'
           - name: 'SERVER_PORT'
             value: '9094'
-          - name: 'SPRING_DATASOURCE_URL'
-            # TODO: devi mettere l'IP qua dentro del POD dove runna il database !!!
-            value: 'jdbc:mysql://10.1.0.141:3306/sprecsample_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
-            # value: 'jdbc:mysql://10.1.0.96:3306/donor_db?allowPublicKeyRetrieval=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC'
-          
-          # TODO:
-          # APP_SHIPMENTSERVICE: "http://shipmentService:9091"
-          # APP_BIOBANKSERVICE: "http://biobankService:9093"
-          # APP_DONORSERVICE: "http://donorService:9095"
+          - name: 'MYSQL_HOST'
+            value: '192.168.14.85'
+          # - name: 'KEYCLOAK_HOST'
+          #   value: 'TODO:'

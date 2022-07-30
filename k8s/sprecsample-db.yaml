@@ -5,6 +5,8 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: init-script
+  namespace: sprecsample
+
 spec:
   accessModes:
     - ReadWriteOnce
@@ -18,6 +20,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: mysql-data-pvc
+  namespace: sprecsample
 spec:
   accessModes:
     - ReadWriteOnce
@@ -30,6 +33,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sprecsample-mysql-deployment
+  namespace: sprecsample
   # you can give any k8s component a label
   # are key/value apirs that are attached to k8s resoruces
   # identifier, which should be meaningful and relevant to users
@@ -54,22 +58,25 @@ spec: # deploy specific specification
         - containerPort: 3306
         env:
         - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-secrets
-              key: mysql-root-pwd
+          value: root
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: db-secrets
+          #     key: mysql-root-pwd
         - name: MYSQL_DATABASE
           value: sprecsample_db
         - name: MYSQL_USER
-          valueFrom:
-            secretKeyRef:
-              name: db-secrets
-              key: mysql-user
+          value: admin
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: db-secrets
+          #     key: mysql-user
         - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-secrets
-              key: mysql-password
+          value: admin
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: db-secrets
+          #     key: mysql-password
         volumeMounts:
         - name: init-script
           mountPath: /docker-entrypoint-initdb.d # we are mounting init-script volume in this directory. so init.sql file will be available here.
@@ -82,6 +89,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: sprecsample-db-service # nome relativo a quello di configuraizone
+  namespace: sprecsample
 spec:
   selector:
     app: sprecsample-mysql  # select pods to forward the request to ...
