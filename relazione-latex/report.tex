@@ -273,9 +273,6 @@ branch \texttt{main} che, in ordine:
     \item Crea l'immagine docker del microservizio e la pusha sul repository GitHub
 \end{enumerate}
 
-TODO: Aggiungi DEscrizione Actions AWS/K8S
-
-
 \section{Kubernetes}
 
 Nonostante aver organizzato il flusso di sviluppo, ed in parte quello di deploy, in un ambiente di produzione, è necessario garantire che non si verifichino interruzioni
@@ -292,28 +289,48 @@ tutti quei comportamenti in maniera automatica. Kubernetes si occupa della scala
     \item \textbf{Gestione di informazioni sensibili e della configurazione} Kubernetes consente di memorizzare e gestire informazioni sensibili, come le password, i token OAuth e le chiavi SSH. Puoi distribuire e aggiornare le informazioni sensibili e la configurazione dell'applicazione senza dover ricostruire le immagini dei container e senza svelare le informazioni sensibili nella configurazione del tuo sistema.
 \end{enumerate}
 
-Per prima cosa, è stata dedicata attenzione alla creazione del db. Infatti, come accadeva nel docker-compose, l’obbiettivo è quello di istanziare dei db, indipendenti dal be, con dei dati pre caricati.
-Nel dettaglio ogni Database è composto da i seguenti volumi di k8s:
+Per prima cosa, è stata dedicata attenzione alla creazione del db. Come già implementato nel docker-compose,
+l’obbiettivo è quello di istanziare dei databases MySQL, indipendenti dal be, con dei dati pre-caricati.
+Nel dettaglio, ogni Database è composto da i seguenti volumi di k8s:
 \begin{enumerate}
-    \item ConfigMap che ....
-    \item Due PersistentVolumeClaim che sono necessari per salvare il file init.db e salvare i dati del dapibus
-    \item Deployment 
-    \item Service
+    \item \textbf{ConfigMap} che permette di istanziare il database con i dati e le tabelle selezionate;
+    \item Due \textbf{PersistentVolumeClaim} utilizzati per salvare lo script di inizializzazione e salvare i dati del database
+    \item \textbf{Deployment} che permette di effettuare il deploy dell'immagine e settare le variabili d'ambiente
+    \item \textbf{Service} 
 \end{enumerate}
 
-Mentre ogni back-end è composto da un deployment e da un service. Per ogni microservizio vorremo instanziare 2 repliche, 3 per keycloak ed 1 solamente per il database (inserisci motivazione)
+È stato previsto, inoltre, un \textbf{Secret volume} necessario per settare le credenziali di accesso dei database che tuttavia per praticità è stato disabilitato. Per mantenere l'intera infrastruttura
+scalabile i database avranno una ed una sola istanza.
+
+Invece, ogni back-end, è composto da un volume di \textit{Deploy} ed un \textit{Service} e 2 repliche.
+
+\textit{TODO: Aggiungi descrizione su come hai messo su keycloak con k8s.....}
+
 
 \section{AWS}
 
-La parte finale, se non la principale, del progetto è stata dedicata per il deploy su aws.
-È stato trovato opportuno utilizzare solamente il servizio di EKS [....inserisci cosa fa....]. Il deploy è stato gestito utilizzando \texttt{kubectl}, \texttt{aws cli}, \texttt{eksctl},
-nel README.md saranno citate le guide ed i comandi utilizzati per la configurazione e set-up.
+La parte finale, del progetto è stata dedicata per il deploy su aws.
+È stato trovato opportuno utilizzare servizio di \textbf{EKS} per gestire il deploy con Kubernetes. Si nota che il \texttt{README} del repository \textit{main} è stato ampiamente commentato con tutte le librerie e comandi 
+utilizzati per la configurazione ed il set up, di conseguenza alcune procedure saranno omesse.
 
-Per prima cosa è stato creato un cluster t2.xlarge con 4 nodi, in quanto il t2.micro risultava troppo piccolo.
+A differenza dei test effettuati in locale, dove veniva utilizzato il namespace di default, sono stati individuati dei namespace di riferimento per ogni microservizio,
+ovvero: \textit{biobank}, \textit{donor}, \textit{sample}, \textit{shipment}, \textit{sprecsample}.  
 
-Sono stati individuati dei namespace di riferimento per ogni microservizio di riferimento, ovvero: \textit{biobank}, \textit{donor}, \textit{sample}, \textit{shipment}, \textit{sprecsample}.  
-È stato previsto, inoltre, un \textbf{Secret volume} necessario per settare le credenziali di accesso per ogni namespace.
+Inizialmente i primi test sono stati effettuati su \texttt{us-east-1}, tuttavia vista la notevole latenza è stato trovato opportuno settare come regione di default \texttt{eu-central-1}
 
+Dopo aver effettuato il login, come prima cosa si crea il cluster utilizzando una istanza T2 large su dei nodi basati su Linux (l'operazione potrebbe durare più di 20 minuti):
+
+\begin{verbatim}
+    eksctl create cluster --name biobank-sprec-v1 --version 1.22 -- region eu-central-1 
+    --nodegroup-name linux-nodes --node-type t2.xlarge --nodes 4
+\end{verbatim}
+
+Una volta creato il cluster, basterà eseguire gli script del repository \texttt{main} all'interno della cartella \texttt{k8s}.
+
+
+
+
+\pagebreak
 
 \begin{thebibliography}{4}
     \bibitem{1} \href{https://www.keycloak.org/docs/11.0/getting_started/}{Getting started with Keycloak}

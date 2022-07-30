@@ -1,8 +1,31 @@
 # sistemi-cloud-unict-2022
 
-`setup-dev.sh` script bash che clona tutte le repository necessarie per avviare il progetto nella cartella `development`. Builda le immagini dei microservizi, sistema i file di configurazione di keycloak e dei database in modo tale che possano essere utilizzati dal docker compose.
+Progetto sviluppato per Sistemi Cloud (Università degli studi di Catania, Informatica Magistrale LM-18 A.A. 2021/2022). Si propone il refactoring ed il deploy su AWS di un progetto a microservizi tra cui l'integrazione le seguenti tecnologie:
+<ul>
+  <li>Autenticazione delle API gestita con Keycloak</i>
+  <li>GitHub actions per il deploy delle immagini su DockerHub</li>
+  <li>Kubernetes (EKS su AWS)</li>
+</ul>
+
+## Script utili
+
+<b>Sviluppo</b>
+
+`setup-dev.sh` script bash che clona tutte le repository necessarie per avviare il progetto nella cartella `development`. Builda le immagini dei microservizi, ordina i file di configurazione di keycloak e dei database in modo tale che possano essere utilizzati dal docker compose.
 
 `update-repo.sh` script bash da eseguire dentro la directory `development` che si occuperà di aggiornare all'ultima versione gli script, imports e le immagini di dei microservizi.
+
+<b>Kubernetes</b>
+
+`aws-db.sh` script bash utilizzato per effettuare il deploy dei database su AWS
+
+`aws-be.sh` script bash utilizzato per effettuare il deploy dei microservizi su AWS
+
+`init-db.sh` script bash utilizzato per effettuare il deploy dei database in locale (usando il namespace di `default`)
+
+`init-be.sh` script bash utilizzato per effettuare il deploy dei microservizi in locale (usando il namespace di `default`)
+
+`restore-k8.sh` script bash utilizzato per rimuovere tutte le risorse
 
 ## Keycloack
 
@@ -20,16 +43,17 @@ Example
 
 Andando su `localhost:8180` sarà possibile accedere alla console con username e password `admin`
 
-[Getting started with Keycloack](https://www.keycloak.org/getting-started/getting-started-docker
+- [Getting started with Keycloack](https://www.keycloak.org/getting-started/getting-started-docker
 ) (Procedura per creazione utente, realm e client) <br>
-[Setup spring-boot keycloack](https://www.baeldung.com/spring-boot-keycloak )
+- [Setup spring-boot keycloack](https://www.baeldung.com/spring-boot-keycloak )
 
 
 ## Docker
 
-Il `docker-compose.yaml` presente nella directory principale della repository è 'pronto all'uso' in quanto utilizzerà le immagini caricate nel registry di docker. Non necessita dunque delle immagini buildate dei vari microservizi.
+Il `docker-compose.yaml` presente nella directory principale della repository è <i>pronto all'uso'
+</i> in quanto utilizza le immagini presenti nel registry di docker.
 
-In caso di errori frequenti del docker-compose `docker-compose down --rmi all`
+In caso di errori frequenti del docker-compose: `docker-compose down --rmi all`
 
 Enter inside docker container mysql
 
@@ -49,257 +73,85 @@ Copia il file di backup in una directory locale
 cp backup.sql DIR_DEST | docker exec -i CONTAINER_ID /usr/bin/mysql -u admin --password=admin DATABASE
 ```
 
+<b>Attenzione:</b> se si volesse eseguire l'intero progetto utilizzando le immagini buildate delle repository, è necessario sostituire le immagini del `docker-compose` della folder di `development` con quelle buildate localmente
 
-### Docker-compose builded images from repos
 
-Se si volesse eseguire l'intero progetto utilizzando le immagini buildate delle repository, dopo aver eseguito `setup-dev.sh` è necessario sostituire il `docker-compose` della folder di `development` con il seguente:
-
-`````
-version: '3.9'
-
-volumes:
-  mysql_data:
-      driver: local
-
-services:
-  keycloak_db:
-      image: mysql:5.7
-      volumes:
-        - mysql_data:/var/lib/keycloak_db
-      environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: keycloak
-        MYSQL_USER: keycloak
-        MYSQL_PASSWORD: password
-  keycloak:
-      image: jboss/keycloak:16.1.1
-      # build:
-      #   context: services/keycloak
-      volumes:
-        - ./imports:/opt/jboss/keycloak/imports
-      command: 
-        - "-b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
-
-      environment:
-        DB_VENDOR: MYSQL
-        DB_ADDR: keycloak_db
-        DB_DATABASE: keycloak
-        DB_USER: keycloak
-        DB_PASSWORD: password
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: admin
-        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
-        #JDBC_PARAMS: "connectTimeout=30000"
-      ports:
-        - 8180:8080
-      depends_on:
-        - keycloak_db
-
-  shipmentService:
-    depends_on:
-      - shipment_db
-    image: shipment:latest
-    restart: unless-stopped
-    ports:
-      - 9091:9091
-    environment:
-      SERVER_PORT: 9091
-      MYSQL_HOST: shipment_db
-      APP_SAMPLESERVICE: "http://sampleService:9092"
-      APP_BIOBANKSERVICE: "http://biobankService:9093"
-  
-  shipment_db:
-    image: mysql:5.7
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: shipment_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-      volumes:
-    volumes:
-      - "./imports/shipment-db.sql:/docker-entrypoint-initdb.d/1.sql"
-    container_name: shipment_db
-  sampleService:
-    depends_on:
-      - sample_db
-    image: sample:latest
-    restart: unless-stopped
-    ports:
-      - 9092:9092
-    environment:
-      SERVER_PORT: 9092
-      MYSQL_HOST: sample_db
-      # APP_USERSERVICE: "http://authenticationService:9090" TODO: Sostituire con keycloack?
-      APP_SHIPMENTSERVICE: "http://shipmentService:9091"
-      APP_BIOBANKSERVICE: "http://biobankService:9093"
-      APP_DONORSERVICE: "http://donorService:9095"
-  
-  sample_db:
-    image: mysql:5.7
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: sample_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-    volumes:
-      - "./imports/sample-db.sql:/docker-entrypoint-initdb.d/1.sql"
-    container_name: sample_db
-
-  biobankService:
-    depends_on:
-      - biobank_db
-    image: biobank:latest
-    restart: unless-stopped
-    ports:
-      - 9093:9093
-    environment:
-      SERVER_PORT: 9093
-      MYSQL_HOST: biobank_db
-
-  biobank_db:
-    image: mysql:5.7
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: biobank_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-    volumes:
-      - "./imports/biobank-db.sql:/docker-entrypoint-initdb.d/1.sql"
-    container_name: biobank_db
-
-  donorService:
-    depends_on:
-      - donor_db
-    image: donor:latest
-    restart: unless-stopped
-    ports:
-      - 9095:9095
-    environment:
-      SERVER_PORT: 9095
-      MYSQL_HOST: donor_db
-
-  donor_db:
-    image: mysql:5.7
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: donor_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-    volumes:
-      - "./imports/donor-db.sql:/docker-entrypoint-initdb.d/1.sql"
-    container_name: donor_db
-
-  sprecsampleService:
-    depends_on:
-      - sprecsample_db
-    image: sprecsample:latest
-    restart: unless-stopped
-    ports:
-      - 9094:9094
-    environment:
-      SERVER_PORT: 9094
-      MYSQL_HOST: sprecsample_db
-
-  sprecsample_db:
-    image: mysql:5.7
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: sprecsample_db
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-    volumes:
-      - "./imports/sprecsample-db.sql:/docker-entrypoint-initdb.d/1.sql"
-    container_name: sprecsample_db
-`````
-
-## Kubernetes
+## Kubernetes & Minikube
 
 Create and start the cluster 
 
-`minikube start --driver docker`
+    minikube start --driver docker
 
 See if everything is running properly
 
-`minikube status`
+    minikube status
 
 Display all nodes in cluster
 
-`kubectl get node`
+    kubectl get node
 
 Apply configuration file (create secret and config first)
 
-`kubectl apply -f CONFIG_FILE.yaml`
+    kubectl apply -f CONFIG_FILE.yaml
 
 Get info:
 
-`kubectl get all`
+    kubectl get all
 
-`kubectl describe NAME_OF_SERVICE NAME_OF_SPECIFIC_SERVICE`
+    kubectl describe NAME_OF_SERVICE NAME_OF_SPECIFIC_SERVICE
 
 examples:
 
-`kubectl describe service donor-service`
+    kubectl describe service donor-service
 
-`kubectl describe pod donor-deployment-756b467d4d-2g7xk`
+    kubectl describe pod donor-deployment-756b467d4d-2g7xk
 
 Show logs:
 
-`kubectl logs POD_NAME -f`
+    kubectl logs POD_NAME -f
 
 How to access service from browser?
 
-`kubectl get svc -o wide`
+    kubectl get svc -o wide
 
-`minikube ip`
+    minikube ip
 
 How to get internal IP:
 
-`kubectl get node -o wide` 
+    kubectl get node -o wide
 
 Get minikube IP and listen to that port
 
 Entrare in bash all'interno di un pod DB mysql:
 
-`kubectl exec --stdin --tty POD_NAME -- /bin/bash` 
+    kubectl exec --stdin --tty POD_NAME -- /bin/bash
 
 `mysql -p` com password `root`
 
-#### K8s commands
+Get basic info about k8s components
 
-##### start Minikube and check status
-    minikube start --driver docker
-    minikube start --vm-driver=hyperkit 
-    minikube status
-
-##### get minikube node's ip address
-    minikube ip
-
-##### get basic info about k8s components
     kubectl get node
     kubectl get pod
     kubectl get svc
     kubectl get all
 
-##### get extended info about components
+Get extended info about components
+
     kubectl get pod -o wide
     kubectl get node -o wide
 
-##### get detailed info about a specific component
+Get detailed info about a specific component
+
     kubectl describe svc {svc-name}
     kubectl describe pod {pod-name}
 
-##### get application logs
+get application logs
+
     kubectl logs {pod-name}
     
-##### stop your Minikube cluster
-    minikube stop
+stop your Minikube cluster
 
-<br />
+    minikube stop
 
 > :warning: **Known issue - Minikube IP not accessible** 
 
@@ -307,4 +159,73 @@ If you can't access the NodePort service webapp with `MinikubeIP:NodePort`, exec
     
     minikube service pod-service
 
-<br />
+### Tips: shortcuts!
+
+    alias k8='kubectl'
+    alias k8-all='kubectl get all'
+    alias k8-pod='kubectl get pods -o wide'
+    alias k8-svc='kubectl get svc -o wide'
+    alias k8-get-cnt='kubectl config get-contexts'
+    alias k8-log='kubectl logs'
+    alias aws-login='aws ecr get-login-password --region <REGION> | docker login --username AWS --password-stdin <ID_AWS>.dkr.ecr.<REGION>.amazonaws.com'
+
+<br/>
+
+## AWS
+
+Login aws-cli
+
+    aws ecr get-login-password --region <REGION> | docker login --username AWS --password-stdin <AWS_ID_ACCOUNT>.dkr.ecr.<REGION>.amazonaws.com
+
+Creazione di un cluster
+
+    eksctl create cluster --name <CLUSTER-NAME> --version <VERSION-K8S> --region <REGION> --nodegroup-name <NODEGROUP_NAME> --node-type <NODE-TYPE> --nodes <N_NODES>
+
+Example:
+
+    eksctl create cluster --name biobank-sprec-cluster --version 1.22 --region us-east-1 --nodegroup-name linux-nodes --node-type t2.xlarge --nodes 4
+
+Delete a cluster
+
+    eksctl delete nodegroup --cluster <CLUSTER_NAME> --region <CODE_REGION> --name linux-nodes
+
+
+Visualizzo i cluster disponibili
+
+    aws eks list-clusters
+
+[Create kubeconfig with aws command](https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html)
+
+    aws eks --region <REGION> update-kubeconfig --name <CLUSTER_NAME>
+
+Creo un namespace per ogni tipo di servizio:
+
+    kubectl create namespace <NAMESPACE_NAME>
+
+Get current context:
+
+    kubectl config current-context
+
+View all vailable context:
+
+    kubectl config get-contexts
+
+Switch context:
+
+    kubectl config use-context <CONTEXT_NAME>
+
+Creazione repository dove pushare le immagini (Facoltativo)
+
+    aws ecr create-repository \
+        --repository-name biobank-sprec \
+        --image-scanning-configuration scanOnPush=true \
+        --region us-east-1
+
+
+- [Getting started AWS](https://docs.aws.amazon.com/AmazonECR/latest/userguide/getting-started-cli.html)
+- [EKS cluster connection](https://aws.amazon.com/it/premiumsupport/knowledge-center/eks-cluster-connection/)
+
+
+
+
+

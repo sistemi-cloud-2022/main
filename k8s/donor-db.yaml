@@ -1,5 +1,3 @@
-# ---- mysql initialization with init container that contrain script file to be executed -----
-
 # this pvc will be used to store downloaded init.sql file
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -23,6 +21,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+    # A volume with volumeMode: Filesystem is mounted into Pods into a directory. If the volume is backed by a block device and the device is empty, Kubernetes creates a filesystem on the device before mounting it for the first time.
   volumeMode: Filesystem
   resources:
     requests:
