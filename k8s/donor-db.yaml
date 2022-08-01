@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: init-script
-  namespace: donor
+  namespace: biobanksprec
 spec:
   accessModes:
     - ReadWriteOnce
@@ -17,7 +17,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: mysql-data-pvc
-  namespace: donor
+  namespace: biobanksprec
 spec:
   accessModes:
     - ReadWriteOnce
@@ -31,7 +31,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: donor-mysql-deployment
-  namespace: donor
+  namespace: biobanksprec
   # you can give any k8s component a label
   # are key/value apirs that are attached to k8s resoruces
   # identifier, which should be meaningful and relevant to users
@@ -87,11 +87,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: donor-db-service # nome relativo a quello di configuraizone
-  namespace: donor
+  namespace: biobanksprec
 spec:
   selector:
     app: donor-mysql  # select pods to forward the request to ...
   ports:
     - protocol: TCP
-      port: 3360 # service port
-      targetPort: 3360 # containerPort of deployment
+      port: 3306 # service port
+      targetPort: 3306 # containerPort of deployment

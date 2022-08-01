@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: donor-mysql-config # arbitrary name
-  namespace: donor # è lo stesso namespace da utilizzare nei service
+  namespace: biobanksprec # è lo stesso namespace da utilizzare nei service
 data: # the actual contents - key-value pairs
   mysql-url: donor-db-service # service we're going to creare for mongdb application
   initdb.sql: |
