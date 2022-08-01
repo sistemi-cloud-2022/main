@@ -20,6 +20,9 @@ git clone https://github.com/sistemi-cloud-2022/biobank development/biobank/
 
 # ---- copy script to update all repos ----
 
+cp -v build-all.sh development/
+chmod u+x development/build-all.sh
+
 cp -v update-repo.sh development/
 chmod u+x development/update-repo.sh
 
