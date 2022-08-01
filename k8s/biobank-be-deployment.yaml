@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: biobank-be
-  namespace: biobank
+  namespace: biobanksprec
   labels:
     app: biobank-be
 spec:
@@ -29,6 +29,6 @@ spec:
             - name: 'SERVER_PORT'
               value: '9093'
             - name: 'MYSQL_HOST'
-              value: '192.168.30.43'
-          # - name: 'KEYCLOAK_HOST'
-          #   value: 'TODO:'
+              value: biobank-db-service
+            - name: 'KEYCLOAK_HOST'
+              value: keycloak

@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: donor-be
-  namespace: donor # è lo stesso namespace da utilizzare nei service
+  namespace: biobanksprec # è lo stesso namespace da utilizzare nei service
   labels:
     app: donor-be
 spec:
@@ -33,9 +33,9 @@ spec:
             value: '9095'
           - name: 'MYSQL_HOST'
           # TODO: devi mettere l'IP qua dentro del POD dove runna il database !!! (anche per aws)
-            value: '192.168.50.75'
-          # - name: 'KEYCLOAK_HOST'
-          #   value: 'TODO:'
+            value: donor-db-service
+          - name: 'KEYCLOAK_HOST'
+            value: keycloak
 
 
           # oppure sovrascrivere l'intero record del db

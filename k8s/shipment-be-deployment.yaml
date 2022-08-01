@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: shipment-be
-  namespace: shipment
+  namespace: biobanksprec
   labels:
     app: shipment-be
 spec:
@@ -28,11 +28,10 @@ spec:
           - name: 'SERVER_PORT'
             value: '9091'
           - name: 'MYSQL_HOST'
-            value: '192.168.63.15'
-          # - name: 'KEYCLOAK_HOST'
-          #   value: 'TODO:'
-          # TODO:
+            value: shipment-db-service
+          - name: 'KEYCLOAK_HOST'
+            value: keycloak
           - name: 'BIOBANK_HOST'
-            value: 'localhost'
+            value: biobank-be-service
           - name: 'SAMPLE_HOST'
-            value: 'localhost'
+            value: sample-be-service

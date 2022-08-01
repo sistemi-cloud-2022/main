@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: sprecsample-be
-  namespace: sprecsample
+  namespace: biobanksprec
   labels:
     app: sprecsample-be
 spec:
@@ -28,6 +28,6 @@ spec:
           - name: 'SERVER_PORT'
             value: '9094'
           - name: 'MYSQL_HOST'
-            value: '192.168.14.85'
-          # - name: 'KEYCLOAK_HOST'
-          #   value: 'TODO:'
+            value: sprecsample-db-service
+          - name: 'KEYCLOAK_HOST'
+            value: keycloak

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
     name: sample-be-service
-    namespace: sample
+    namespace: biobanksprec
 spec:
     type: LoadBalancer
     ports:

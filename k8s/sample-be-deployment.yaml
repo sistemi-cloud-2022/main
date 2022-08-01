@@ -2,7 +2,7 @@ apiVersion : apps/v1
 kind: Deployment
 metadata:
   name: sample-be
-  namespace: sample
+  namespace: biobanksprec
   labels:
     app: sample-be
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: sample-be
-          image: khalld/sample:latest
+          image: sample:latest #khalld/sample:latest
           ports:
           - containerPort: 9092
           env:
@@ -28,12 +28,12 @@ spec:
           - name: 'SERVER_PORT'
             value: '9092'
           - name: 'MYSQL_HOST'
-            value: '192.168.21.13'
-          # - name: 'KEYCLOAK_HOST'
-          #   value: 'TODO:'
-          # - name: 'BIOBANK_HOST'
-          #   value: 'TODO:'
-          # - name: 'DONOR_HOST'
-          #   value: ''
-          # - name: 'SHIPMENT_HOST'
-          #   value: ''
+            value: sample-db-service
+          - name: 'KEYCLOAK_HOST'
+            value: keaycloak
+          - name: 'BIOBANK_HOST'
+            value: biobank-be-service
+          - name: 'DONOR_HOST'
+            value: donor-be-service
+          - name: 'SHIPMENT_HOST'
+            value: shipment-be-service
