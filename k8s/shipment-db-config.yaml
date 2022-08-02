@@ -50,12 +50,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `shipment_boxes`
     --
 
-    LOCK TABLES `shipment_boxes` WRITE;
-    /*!40000 ALTER TABLE `shipment_boxes` DISABLE KEYS */;
-    INSERT INTO `shipment_boxes` VALUES (1,'B49A89329BB',9,'Freezer 1/Division 1/Drawer 1/Slot 3',NULL,1,1),(2,'B7135B8BD1B',7,'Freezer 1/Division 1/Drawer 1/Slot 1',NULL,2,1),(3,'B065E4EDBC8',7,'Freezer 1/Division 1/Drawer 1/Slot 1',NULL,3,1);
-    /*!40000 ALTER TABLE `shipment_boxes` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `shipments`
     --
@@ -83,12 +77,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `shipments`
     --
 
-    LOCK TABLES `shipments` WRITE;
-    /*!40000 ALTER TABLE `shipments` DISABLE KEYS */;
-    INSERT INTO `shipments` VALUES (1,'ospedale tal de tali','bla bla','2019-08-08 07:00:00','123456789',1,2),(2,'Garibaldi',NULL,'1996-12-31 16:45:00','34567123456',1,1),(3,'Garibaldi','sssss-1-35:0978/90','2003-09-26 19:59:00','ab-34rgt67',1,1);
-    /*!40000 ALTER TABLE `shipments` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `static_shipments_boxes_status`
     --
@@ -106,12 +94,6 @@ data: # the actual contents - key-value pairs
     --
     -- Dumping data for table `static_shipments_boxes_status`
     --
-
-    LOCK TABLES `static_shipments_boxes_status` WRITE;
-    /*!40000 ALTER TABLE `static_shipments_boxes_status` DISABLE KEYS */;
-    INSERT INTO `static_shipments_boxes_status` VALUES (1,'Stored. Ready to be processed'),(2,'Completed');
-    /*!40000 ALTER TABLE `static_shipments_boxes_status` ENABLE KEYS */;
-    UNLOCK TABLES;
 
     --
     -- Table structure for table `static_shipments_condition`
@@ -131,12 +113,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `static_shipments_condition`
     --
 
-    LOCK TABLES `static_shipments_condition` WRITE;
-    /*!40000 ALTER TABLE `static_shipments_condition` DISABLE KEYS */;
-    INSERT INTO `static_shipments_condition` VALUES (1,'Good Conditions'),(2,'Not Good Conditions');
-    /*!40000 ALTER TABLE `static_shipments_condition` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `static_shipments_status`
     --
@@ -154,13 +130,6 @@ data: # the actual contents - key-value pairs
     --
     -- Dumping data for table `static_shipments_status`
     --
-
-    LOCK TABLES `static_shipments_status` WRITE;
-    /*!40000 ALTER TABLE `static_shipments_status` DISABLE KEYS */;
-    INSERT INTO `static_shipments_status` VALUES (1,'Shipment Acquired'),(2,'Temporary Stored'),(3,'Temporary Stored + Documents'),(4,'Completed');
-    /*!40000 ALTER TABLE `static_shipments_status` ENABLE KEYS */;
-    UNLOCK TABLES;
-    /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
     /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
     /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
