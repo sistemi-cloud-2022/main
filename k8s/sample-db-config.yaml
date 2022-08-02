@@ -55,12 +55,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `collections`
     --
 
-    LOCK TABLES `collections` WRITE;
-    /*!40000 ALTER TABLE `collections` DISABLE KEYS */;
-    INSERT INTO `collections` VALUES (1,NULL,NULL,NULL,NULL,'prova',NULL,1,2,2),(2,'tst',29,28,'AD:test di giorno 30/09/2019','test','test',1,4,1),(3,'tst',5,8,NULL,'prova',NULL,1,10,2),(4,'vvvv',34,2,'vvvvv','v','vvvv',1,11,1);
-    /*!40000 ALTER TABLE `collections` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `collections_samples`
     --
@@ -84,12 +78,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `collections_samples`
     --
 
-    LOCK TABLES `collections_samples` WRITE;
-    /*!40000 ALTER TABLE `collections_samples` DISABLE KEYS */;
-    INSERT INTO `collections_samples` VALUES (3,1,5),(4,1,6),(5,1,2),(6,2,1),(7,2,3),(8,2,7),(10,1,4),(11,1,4),(12,1,4),(13,1,4),(14,1,4),(15,2,1),(16,3,8),(17,3,10);
-    /*!40000 ALTER TABLE `collections_samples` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `miabis_material_type`
     --
@@ -109,12 +97,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `miabis_material_type`
     --
 
-    LOCK TABLES `miabis_material_type` WRITE;
-    /*!40000 ALTER TABLE `miabis_material_type` DISABLE KEYS */;
-    INSERT INTO `miabis_material_type` VALUES (1,'Blood that has not been separated into its various components; blood that has not been modified except for the addition of an anticoagulant.','Blood'),(2,'A long linear double-stranded polymer formed from nucleotides attached to a deoxyribose backbone and found in the nucleus of a cell; associated with the transmission of genetic information.','DNA'),(3,'The material discharged from the bowel during defecation. It consists of undigested food, intestinal mucus, epithelial cells, and bacteria.','Faeces'),(4,'Cells of a single type (human, animal, or plant) that have been adapted to grow continuously in the laboratory and are used in research.','Immortalized Cell Lines'),(5,'An isolated biological agent causing disease; a disease producer e.g. virus, bacterium, prion, other microorganism etc.','Isolated Pathogen'),(6,'Any other type of material taken from a biological entity, e.g. amniotic fluid, cerebrospinal fluid (CSV), mitochondrial RNA.','Other'),(7,'Plasma is the fluid (acellular) portion of the circulating blood, as distinguished from the serum that is the fluid portion of the blood obtained by removal of the fibrin clot and blood cells after coagulation.','Plasma'),(8,'One of two types of nucleic acid made by cells. RNA contains information that has been copied from DNA (the other type of nucleic acid). Cells make several different forms of RNA, and each form has a specific job in the cell.','RNA'),(9,'A clear liquid secreted into the mouth by the salivary glands and mucous glands of the mouth; moistens the mouth and starts the digestion of starches.','Saliva'),(10,'The clear portion of the blood that remains after the removal of the blood cells and the clotting proteins.','Serum'),(11,'An anatomical structure consisting of similarly specialized cells and intercellular matrix, aggregated according to genetically determined spatial relationships, performing a specific function.','Tissue (Frozen)'),(12,'Tissue, formalin fixated and paraffin preserved or equivalent.','Tissue (FFPE)'),(13,'The fluid that is excreted by the kidneys. It is stored in the bladder and discharged through the urethra.','Urine');
-    /*!40000 ALTER TABLE `miabis_material_type` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `miabis_quantities`
     --
@@ -132,12 +114,6 @@ data: # the actual contents - key-value pairs
     --
     -- Dumping data for table `miabis_quantities`
     --
-
-    LOCK TABLES `miabis_quantities` WRITE;
-    /*!40000 ALTER TABLE `miabis_quantities` DISABLE KEYS */;
-    INSERT INTO `miabis_quantities` VALUES (1,'ml'),(2,'l'),(3,'g'),(4,'mg');
-    /*!40000 ALTER TABLE `miabis_quantities` ENABLE KEYS */;
-    UNLOCK TABLES;
 
     --
     -- Table structure for table `miabis_sex`
@@ -158,12 +134,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `miabis_sex`
     --
 
-    LOCK TABLES `miabis_sex` WRITE;
-    /*!40000 ALTER TABLE `miabis_sex` DISABLE KEYS */;
-    INSERT INTO `miabis_sex` VALUES (1,'Male.','Male'),(2,'Female.','Female'),(3,'A proper value is applicable but not known.','Unknown'),(4,'Undifferentiated, the gender could not be uniquely identified such as hermaphrodite.','Undifferentiated');
-    /*!40000 ALTER TABLE `miabis_sex` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `miabis_storage_temperature`
     --
@@ -182,12 +152,6 @@ data: # the actual contents - key-value pairs
     --
     -- Dumping data for table `miabis_storage_temperature`
     --
-
-    LOCK TABLES `miabis_storage_temperature` WRITE;
-    /*!40000 ALTER TABLE `miabis_storage_temperature` DISABLE KEYS */;
-    INSERT INTO `miabis_storage_temperature` VALUES (1,'Room temperature','RT'),(2,'Between 2 °C and 10 °C','2 °C to 10°C'),(3,'Between -18 °C and -35 °C','-18 °C to -35 °C'),(4,'Between -60 °C and -85 °C','-60 °C to -85 °C'),(5,'Liquid Nitrogen, -150 °C to -196 °C','LN'),(6,'Any other temperature or long time storage information','Other');
-    /*!40000 ALTER TABLE `miabis_storage_temperature` ENABLE KEYS */;
-    UNLOCK TABLES;
 
     --
     -- Table structure for table `sample`
@@ -228,12 +192,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `sample`
     --
 
-    LOCK TABLES `sample` WRITE;
-    /*!40000 ALTER TABLE `sample` DISABLE KEYS */;
-    INSERT INTO `sample` VALUES (1,NULL,NULL,NULL,30,'9','Freezer 1/Division 1/Drawer 1/Slot 3',NULL,150,'SA903F94462','2018-05-25 15:12:00',NULL,'CLN-A12-B-B-ACA-G-T',1,1,39,1),(2,'ddd',NULL,NULL,NULL,'7','Freezer 1/Division 1/Drawer 1/Slot 1',NULL,NULL,'SC7D2A18B40','2019-08-08 09:00:00',NULL,'CEN-A06-B-B-ALL-B-D',1,1,38,1),(3,NULL,1,NULL,NULL,'7','Freezer 1/Division 1/Drawer 1/Slot 1',NULL,NULL,'SCB56E14484',NULL,NULL,'AMN-ADD-J-N-N-J-N',NULL,NULL,2,1),(4,NULL,1,1,22,'2','Freezer 2',NULL,NULL,'S89A9AC7486',NULL,'klòkokpèok',NULL,NULL,2,39,3),(5,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,'S8B94326D91',NULL,NULL,'AMN-ACD-N-J-N-J-N',NULL,NULL,2,NULL),(6,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,'SFB2CAB69B5',NULL,NULL,NULL,NULL,NULL,2,NULL),(7,NULL,NULL,NULL,NULL,'2','Freezer 2',NULL,NULL,'S73525269DD','2019-01-01 00:00:00',NULL,NULL,1,1,2,1),(8,NULL,NULL,NULL,24,'2','Freezer 2',NULL,NULL,'S82C2BF4479','2018-05-25 15:12:00',NULL,NULL,1,2,3,1),(9,NULL,NULL,NULL,25,'2','Freezer 2',NULL,NULL,'S956A6E8C82','2018-05-25 15:12:00',NULL,NULL,1,2,38,1),(10,NULL,NULL,NULL,26,'2','Freezer 2',NULL,NULL,'S64A719ECA1','2019-02-04 00:00:00',NULL,NULL,1,1,38,1),(11,NULL,NULL,NULL,NULL,'2','Freezer 2',NULL,NULL,'SC7F2017DE8','2019-01-01 00:01:00',NULL,NULL,1,5,38,1);
-    /*!40000 ALTER TABLE `sample` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `sample_type`
     --
@@ -254,12 +212,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `sample_type`
     --
 
-    LOCK TABLES `sample_type` WRITE;
-    /*!40000 ALTER TABLE `sample_type` DISABLE KEYS */;
-    INSERT INTO `sample_type` VALUES (1,'ASC','Ascites Fluid',0),(2,'AMN','Amniotic Fluid',0),(3,'BAL','Bronchoalveolar Lavage',0),(4,'BLD','Blood (whole)',0),(5,'BMA','Bone Marrow Aspirate',0),(6,'BMK','Breast Milk',0),(7,'BUC','Buccal Cells',0),(8,'BUF','Unficolled buffy coat, viable',0),(9,'BFF','Unficolled buffy coat, non viable',0),(10,'CEL','Ficoll mononuclear cells, viable',0),(11,'CEN','Fresh cells from nonblooc specimen type',0),(12,'CLN','Cells from nonblood speciment type (e.g., ascites, amniotic) viable',0),(13,'CSF','Cord Blood',0),(14,'CSF','Cerebrospinal Fluid',0),(15,'CTC','Enriched (physichochemically) circulating tumor cells',0),(16,'DWB','Dried whole blood (e.g., Gunthrie cards)',0),(17,'NAS','Nasal Washing',0),(18,'PEL','Ficoll mononuclear cells, nonviable',0),(19,'PEN','Cells from nonblood specimen type (e.g, ascites, amniotic) nonviable',0),(20,'PFL','Pleural Fluid',0),(21,'PLP','Dental Pulp',0),(22,'PL1','Plasma, single spun',0),(23,'PL2','Plasma, double spun',0),(24,'RBC','Red blood cells',0),(25,'SAL','Saliva',0),(26,'SEM','Semen',0),(27,'SER','Serum',0),(28,'SPT','Sputum',0),(29,'STL','Stool',0),(30,'SYN','Synovial Fluid',0),(31,'TER','Tears',0),(32,'U24','24h Urine',0),(33,'URN','Urine, random (\"spot\")',0),(34,'URM','Urine, first morning',0),(35,'URT','Urine, timed',0),(36,'ZZZ','Other',0),(37,'BON','Bone',1),(38,'CEN','Fresh cells from nonblood specimen type (e.g., biopsy)',1),(39,'CLN','Cells from nonblood specimen type (e.g., dissociated tissue), viable',1),(40,'FNA','Cells from fine needle aspirate',1),(41,'HAR','Hair',1),(42,'LCM','Cells from lase capture microdissected tissue',1),(43,'NAL','Nails',1),(44,'PEN','Cells from nonblood specimen type (e.g., dissociated tissue), nonviable',1),(45,'PLC','Placenta',1),(46,'TIS','Solid Tissue',1),(47,'TCM','Disrupted tissue, nonviable',1),(48,'TTH','Teeth',1),(49,'ZZZ','Other',1);
-    /*!40000 ALTER TABLE `sample_type` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `static_age_unit`
     --
@@ -278,11 +230,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `static_age_unit`
     --
 
-    LOCK TABLES `static_age_unit` WRITE;
-    /*!40000 ALTER TABLE `static_age_unit` DISABLE KEYS */;
-    INSERT INTO `static_age_unit` VALUES (1,'Years'),(2,'Months'),(3,'Weeks'),(4,'Days');
-    /*!40000 ALTER TABLE `static_age_unit` ENABLE KEYS */;
-    UNLOCK TABLES;
     /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
     /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -294,3 +241,141 @@ data: # the actual contents - key-value pairs
     /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
     -- Dump completed on 2022-07-17 14:11:08
+
+    /*
+    Insert static_age_unit records
+    */
+    INSERT INTO `static_age_unit` (`id`, `name`)
+    VALUES (1,'Years'),(2,'Months'),(3,'Weeks'),(4,'Days');
+    /*
+        Insert miabis_quantities records
+    */
+    INSERT INTO `miabis_quantities` (`id`, `unit_of_measure`)
+    VALUES (1,'ml'),(2,'l'),(3,'g'),(4,'mg');
+    /*
+        Insert miabis_sex records
+    */
+    INSERT INTO `miabis_sex` (`id`, `name`, `definition`)
+    VALUES (1,'Male','Male.'),(2,'Female','Female.'),
+      (3,'Unknown','A proper value is applicable but not known.'),
+      (4,'Undifferentiated','Undifferentiated, the gender could not be uniquely identified such as hermaphrodite.');
+    /*
+        Insert miabis_material_type records
+    */
+    INSERT INTO `miabis_material_type` (`id`, `name`, `definition`)
+    VALUES
+      (1,'Blood','Blood that has not been separated into its various components; blood that has not been modified except for the addition of an anticoagulant.'),
+      (2,'DNA','A long linear double-stranded polymer formed from nucleotides attached to a deoxyribose backbone and found in the nucleus of a cell; associated with the transmission of genetic information.'),
+      (3,'Faeces','The material discharged from the bowel during defecation. It consists of undigested food, intestinal mucus, epithelial cells, and bacteria.'),
+      (4,'Immortalized Cell Lines','Cells of a single type (human, animal, or plant) that have been adapted to grow continuously in the laboratory and are used in research.'),
+      (5,'Isolated Pathogen','An isolated biological agent causing disease; a disease producer e.g. virus, bacterium, prion, other microorganism etc.'),
+      (6,'Other','Any other type of material taken from a biological entity, e.g. amniotic fluid, cerebrospinal fluid (CSV), mitochondrial RNA.'),
+      (7,'Plasma','Plasma is the fluid (acellular) portion of the circulating blood, as distinguished from the serum that is the fluid portion of the blood obtained by removal of the fibrin clot and blood cells after coagulation.'),
+      (8,'RNA','One of two types of nucleic acid made by cells. RNA contains information that has been copied from DNA (the other type of nucleic acid). Cells make several different forms of RNA, and each form has a specific job in the cell.'),
+      (9,'Saliva','A clear liquid secreted into the mouth by the salivary glands and mucous glands of the mouth; moistens the mouth and starts the digestion of starches.'),
+      (10,'Serum','The clear portion of the blood that remains after the removal of the blood cells and the clotting proteins.'),
+      (11,'Tissue (Frozen)','An anatomical structure consisting of similarly specialized cells and intercellular matrix, aggregated according to genetically determined spatial relationships, performing a specific function.'),
+      (12,'Tissue (FFPE)','Tissue, formalin fixated and paraffin preserved or equivalent.'),
+      (13,'Urine','The fluid that is excreted by the kidneys. It is stored in the bladder and discharged through the urethra.');
+
+    /*
+        Insert miabis_storage_temperature records
+    */
+    INSERT INTO `miabis_storage_temperature` (`id`, `name`, `definition`)
+    VALUES
+      (1,'RT','Room temperature'),
+      (2,'2 °C to 10°C','Between 2 °C and 10 °C'),
+      (3,'-18 °C to -35 °C','Between -18 °C and -35 °C'),
+      (4,'-60 °C to -85 °C','Between -60 °C and -85 °C'),
+      (5,'LN','Liquid Nitrogen, -150 °C to -196 °C'),
+      (6,'Other','Any other temperature or long time storage information');
+    /*
+        Insert sample_type records
+    */
+    INSERT INTO `sample_type` (`id`, `tipo`, `denomination`, `acronym`)
+    VALUES
+      (1,0,'Ascites Fluid','ASC'),
+      (2,0,'Amniotic Fluid','AMN'),
+      (3,0,'Bronchoalveolar Lavage','BAL'),
+      (4,0,'Blood (whole)','BLD'),
+      (5,0,'Bone Marrow Aspirate','BMA'),
+      (6,0,'Breast Milk','BMK'),
+      (7,0,'Buccal Cells','BUC'),
+      (8,0,'Unficolled buffy coat, viable','BUF'),
+      (9,0,'Unficolled buffy coat, non viable','BFF'),
+      (10,0,'Ficoll mononuclear cells, viable','CEL'),
+      (11,0,'Fresh cells from nonblooc specimen type','CEN'),
+      (12,0,'Cells from nonblood speciment type (e.g., ascites, amniotic) viable','CLN'),
+      (13,0,'Cord Blood','CSF'),
+      (14,0,'Cerebrospinal Fluid','CSF'),
+      (15,0,'Enriched (physichochemically) circulating tumor cells','CTC'),
+      (16,0,'Dried whole blood (e.g., Gunthrie cards)','DWB'),
+      (17,0,'Nasal Washing','NAS'),
+      (18,0,'Ficoll mononuclear cells, nonviable','PEL'),
+      (19,0,'Cells from nonblood specimen type (e.g, ascites, amniotic) nonviable','PEN'),
+      (20,0,'Pleural Fluid','PFL'),
+      (21,0,'Dental Pulp','PLP'),
+      (22,0,'Plasma, single spun','PL1'),
+      (23,0,'Plasma, double spun','PL2'),
+      (24,0,'Red blood cells','RBC'),
+      (25,0,'Saliva','SAL'),
+      (26,0,'Semen','SEM'),
+      (27,0,'Serum','SER'),
+      (28,0,'Sputum','SPT'),
+      (29,0,'Stool','STL'),
+      (30,0,'Synovial Fluid','SYN'),
+      (31,0,'Tears','TER'),
+      (32,0,'24h Urine','U24'),
+      (33,0,'Urine, random (\"spot\")','URN'),
+      (34,0,'Urine, first morning','URM'),
+      (35,0,'Urine, timed','URT'),
+      (36,0,'Other','ZZZ'),
+      (37,1,'Bone','BON'),
+      (38,1,'Fresh cells from nonblood specimen type (e.g., biopsy)','CEN'),
+      (39,1,'Cells from nonblood specimen type (e.g., dissociated tissue), viable','CLN'),
+      (40,1,'Cells from fine needle aspirate','FNA'),
+      (41,1,'Hair','HAR'),
+      (42,1,'Cells from lase capture microdissected tissue','LCM'),
+      (43,1,'Nails','NAL'),
+      (44,1,'Cells from nonblood specimen type (e.g., dissociated tissue), nonviable','PEN'),
+      (45,1,'Placenta','PLC'),
+      (46,1,'Solid Tissue','TIS'),
+      (47,1,'Disrupted tissue, nonviable','TCM'),
+      (48,1,'Teeth','TTH'),
+      (49,1,'Other','ZZZ');
+
+    /*
+        Insert sample records
+    */
+    INSERT INTO `sample` (`id`, `user_id`, `box_id`, `donor_id`, `consent_id`, `sample_id`, `location_id`, `location_path`, `parent_sample_id`, `type_id`, `sprec`, `sampling_technique`, `storage_temperature`, `sampled_time`, `anatomycal_site`, `residual_quantity`, `um_id`)
+    VALUES
+      (1,1,NULL,30,NULL,'SA903F94462','9','Freezer 1/Division 1/Drawer 1/Slot 3',NULL,39,'CLN-A12-B-B-ACA-G-T',NULL,1,'2018-05-25 15:12:00',NULL,150.00,1),
+      (2,1,NULL,NULL,NULL,'SC7D2A18B40','7','Freezer 1/Division 1/Drawer 1/Slot 1',NULL,38,'CEN-A06-B-B-ALL-B-D',NULL,1,'2019-08-08 09:00:00','ddd',NULL,1),
+      (3,NULL,1,NULL,NULL,'SCB56E14484','7','Freezer 1/Division 1/Drawer 1/Slot 1',NULL,2,'AMN-ADD-J-N-N-J-N',NULL,NULL,NULL,NULL,NULL,1),
+      (4,NULL,1,22,1,'S89A9AC7486','2','Freezer 2',NULL,39,NULL,'klòkokpèok',2,NULL,NULL,NULL,3),
+      (5,NULL,1,NULL,NULL,'S8B94326D91',NULL,NULL,NULL,2,'AMN-ACD-N-J-N-J-N',NULL,NULL,NULL,NULL,NULL,NULL),
+      (6,NULL,1,NULL,NULL,'SFB2CAB69B5',NULL,NULL,NULL,2,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+      (7,1,NULL,NULL,NULL,'S73525269DD','2','Freezer 2',NULL,2,NULL,NULL,1,'2019-01-01 00:00:00',NULL,NULL,1),
+      (8,1,NULL,24,NULL,'S82C2BF4479','2','Freezer 2',NULL,3,NULL,NULL,2,'2018-05-25 15:12:00',NULL,NULL,1),
+      (9,1,NULL,25,NULL,'S956A6E8C82','2','Freezer 2',NULL,38,NULL,NULL,2,'2018-05-25 15:12:00',NULL,NULL,1),
+      (10,1,NULL,26,NULL,'S64A719ECA1','2','Freezer 2',NULL,38,NULL,NULL,1,'2019-02-04 00:00:00',NULL,NULL,1),
+      (11,1,NULL,NULL,NULL,'SC7F2017DE8','2','Freezer 2',NULL,38,NULL,NULL,5,'2019-01-01 00:01:00',NULL,NULL,1);
+
+    /*
+        Insert colletions records
+    */
+    INSERT INTO `collections` (`id`, `name`, `acronym`, `description`, `sex_id`, `age_low`, `age_high`, `age_unit_id`, `material_type_id`, `note`)
+    VALUES
+      (1,'prova',NULL,NULL,2,NULL,NULL,1,2,NULL),
+      (2,'test','tst','AD:test di giorno 30/09/2019',1,28,29,1,4,'test'),
+      (3,'prova','tst',NULL,2,8,5,1,10,NULL),
+      (4,'v','vvvv','vvvvv',1,2,34,1,11,'vvvv');
+
+    /*
+        Insert colletions_samples records
+    */
+    INSERT INTO `collections_samples` (`id`, `sample_id`, `collection_id`)
+    VALUES
+      (3,5,1),(4,6,1),(5,2,1),(6,1,2),(7,3,2),(8,7,2),
+      (10,4,1),(11,4,1),(12,4,1),(13,4,1),(14,4,1),
+      (15,1,2),(16,8,3),(17,10,3);

@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: sample-be
-          image: sample:latest #khalld/sample:latest
+          image: khalld/sample:latest
+          imagePullPolicy: Always
           ports:
           - containerPort: 9092
           env:
@@ -30,7 +31,7 @@ spec:
           - name: 'MYSQL_HOST'
             value: sample-db-service
           - name: 'KEYCLOAK_HOST'
-            value: keaycloak
+            value: keycloak
           - name: 'BIOBANK_HOST'
             value: biobank-be-service
           - name: 'DONOR_HOST'

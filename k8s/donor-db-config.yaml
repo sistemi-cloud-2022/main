@@ -198,3 +198,47 @@ data: # the actual contents - key-value pairs
     /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
     -- Dump completed on 2022-07-17 14:16:01
+
+    INSERT INTO `donors` (`id`, `random_id`, `first_name`, `last_name`, `identification_number`, `birth_date`, `sex`, `collected_data`, `survey_data`, `ethnic_group`, `death_date`, `death_cause`, `contact_information`, `created_at`, `updated_at`, `deleted_at`)
+    VALUES
+      (13,NULL,'Angela','Castiglione','CSTANG83H54C351H','1983-06-14','Female',NULL,NULL,'Caucasian',NULL,NULL,NULL,NULL,'2019-10-16 10:48:00','2019-10-16 10:48:00'),
+      (14,'4030929677','','','4030929677',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-10-20 15:46:20',NULL),
+      (15,'2560203490','','','2560203490',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-10-20 15:46:51',NULL),
+      (16,NULL,'LIMO','ANGELO','ANGLNA90A35C385A','1990-06-13','Female',NULL,NULL,'Caucasian',NULL,NULL,NULL,NULL,'2020-11-02 12:06:25',NULL),
+      (17,NULL,'Concordio','Trevisani','TRVCCO45A15A028B','1945-01-15','Male',NULL,NULL,'Caucasian',NULL,NULL,NULL,NULL,NULL,NULL),
+      (18,NULL,'Geraldino','Rossi','RSSGER75C17C351H','1975-03-17','Male',NULL,NULL,'Caucasian',NULL,NULL,NULL,NULL,NULL,NULL),
+      (19,'1447519318','ANONYMOUS','ANONYMOUS','1447519318',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2019-09-30 14:09:48','2019-09-30 14:09:48',NULL),
+      (20,'1410873500','ANONYMOUS','ANONYMOUS','1410873500',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2019-09-30 14:17:36','2019-09-30 14:17:36',NULL),
+      (21,'3121823405','ANONYMOUS','ANONYMOUS','3121823405',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2019-09-30 14:19:03','2019-09-30 14:19:03',NULL),
+      (22,NULL,'CIAO','CIAO2','412211241','2019-12-31','Male',NULL,NULL,'African','2019-12-31',NULL,NULL,'2019-09-30 14:20:54','2019-09-30 14:20:54',NULL),
+      (23,'3685959996','ANONYMOUS','ANONYMOUS','3685959996',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2019-10-02 14:57:19','2019-10-02 14:57:19',NULL),
+      (24,NULL,'POIU','UIOP','123654','1111-12-12','Male',NULL,NULL,'Other','1115-12-12',NULL,NULL,'2019-10-02 14:58:10','2019-10-02 14:58:30',NULL),
+      (25,NULL,'AAA','AAA','AAA',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2019-10-02 15:30:19','2019-10-02 15:30:19',NULL),
+      (26,'592461437','ANONYMOUS','ANONYMOUS','592461437',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2019-10-02 15:35:06','2019-10-02 15:35:06',NULL),
+      (27,'369531264','ANONYMOUS','ANONYMOUS','369531264',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2019-10-03 14:11:53','2019-10-03 14:11:53',NULL),
+      (28,'4157103709','ANONYMOUS','ANONYMOUS','4157103709',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2019-10-23 13:19:23','2019-10-23 13:19:23',NULL),
+      (29,NULL,'BHJBK','FGVUFUKY','870707','2003-09-22','Male',NULL,NULL,'Other','2018-09-22','shot',NULL,'2019-10-23 13:23:14','2019-10-23 13:23:14',NULL),
+      (30,NULL,'ALBERTO','LOBERTO','222',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-06-29 13:32:47','2020-06-29 13:32:47',NULL),
+      (31,'812080032','','','812080032',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-10-20 15:47:23',NULL),
+      (32,'881796460','','','881796460',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-10-20 15:48:04',NULL);
+
+    INSERT INTO `miabis_ethnic_groups` (`id`, `name`)
+    VALUES
+      (1,'African'),
+      (2,'Caucasian'),
+      (3,'Pacific Islander'),
+      (4,'East Asian'),
+      (5,'Native American'),
+      (6,'Other');
+
+    INSERT INTO `donor_clinicals` (`id`, `donor_id`, `donor_desease`, `clinic_informations`, `other_informations`, `created_at`, `updated_at`)
+    VALUES
+      (1,22,'saexnhgiolsdfnh','dnvsdonasdfphjap','qwfnhfaspiophas','2019-09-30 14:21:55','2019-09-30 14:21:55'),
+      (2,13,NULL,NULL,NULL,'2019-10-03 14:29:42','2019-10-03 14:29:42');
+
+    INSERT INTO `contacts` (`id`, `first_name`, `last_name`)
+    VALUES (1, 'Chris', 'Martin');
+
+    INSERT INTO `consents` (`id`, `user_id`, `donor_id`, `contact_id`, `consent_details`, `created_at`, `updated_at`, `deleted_at`)
+    VALUES
+      (1,1,22,1,'{\"informFamily\": true, \"diagnosisPurposes\": true, \"shareDataResearch\": true, \"scientificResearch\": true, \"shareDataDiagnosis\": true, \"specialRequirements\": null}','2019-09-30 14:22:02','2019-09-30 14:22:02',NULL);

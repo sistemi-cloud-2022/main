@@ -45,12 +45,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `centrifugations`
     --
 
-    LOCK TABLES `centrifugations` WRITE;
-    /*!40000 ALTER TABLE `centrifugations` DISABLE KEYS */;
-    INSERT INTO `centrifugations` VALUES (2,'C','no braking','10 to 15 min','<3000g','2 to 10°C'),(3,'D','with braking','10 to 15 min','<3000g','20 to 10°C'),(4,'J','with braking','10 to 15 min','>10000g','2 to 10°C'),(5,'F','with braking','10 to 15 min','3000g to 6000g','2 to 10°C'),(6,'H','with braking','10 to 15 min','6000g to 10000g','2 to 10°C'),(7,'N','No centrifugation','No centrifugation','No centrifugation','No centrifugation'),(8,'Z','Other','Other','Other','Other'),(9,'A','no braking','10 to 15 min','<3000g','RT'),(10,'B','with braking','10 to 15 min','<3000g','RT'),(11,'I','with braking','10 to 15 min','>10000g','RT'),(12,'E','with braking','10 to 15 min','3000g to 6000g','RT'),(13,'G','with braking','10 to 15 min','6000g to 10000g','RT'),(14,'M','no braking','30 min','<1000g','RT'),(15,'X','Unknown','Unknown','Unknown','Unknown');
-    /*!40000 ALTER TABLE `centrifugations` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `collection_types`
     --
@@ -69,12 +63,6 @@ data: # the actual contents - key-value pairs
     --
     -- Dumping data for table `collection_types`
     --
-
-    LOCK TABLES `collection_types` WRITE;
-    /*!40000 ALTER TABLE `collection_types` DISABLE KEYS */;
-    INSERT INTO `collection_types` VALUES (1,'A06','Autopsy < 6 h post-mortem'),(2,'A12','Autopsy 06-12 h post-mortem'),(3,'A24','Autopsy 12-24 h post-mortem'),(4,'A48','Autopsy 24-48 h post-mortem'),(5,'A72','Autopsy 48-72 h post-portem'),(6,'BPS','Biopsy'),(7,'BCM','Biopsy in culture media'),(8,'BSL','Biopsy in normal saline or phosphate buffered saline'),(9,'BTM','Biopsy in tissue low temperature transport media'),(10,'FNA','Fine needle aspirate'),(11,'ZZZ','Other'),(12,'PUN','Punction'),(13,'SRG','Surgical excision'),(14,'SCM','Surgical excision in culture media'),(15,'SSL','Surgical excision in normal saline or phosphate buffered saline'),(16,'STM','Surgical excision in tissue low temperature transport media'),(17,'VAC','Surgical excision in vacuum container'),(18,'SWB','Swab');
-    /*!40000 ALTER TABLE `collection_types` ENABLE KEYS */;
-    UNLOCK TABLES;
 
     --
     -- Table structure for table `fixation_stabilizations`
@@ -95,12 +83,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `fixation_stabilizations`
     --
 
-    LOCK TABLES `fixation_stabilizations` WRITE;
-    /*!40000 ALTER TABLE `fixation_stabilizations` DISABLE KEYS */;
-    INSERT INTO `fixation_stabilizations` VALUES (1,'ETH','Alcohol-based'),(2,'ALD','Aldehyde-based'),(3,'ALL','Allprotect tissue reagent'),(4,'HST','Heat stabilization'),(5,'NBF','Neutral buffered formalin'),(6,'NAA','Non-aldehyde based without acetic acid'),(7,'ACA','Non-aldehyde with acetic acid'),(8,'FOR','Non-buffered formalin'),(9,'OCT','Optimum cutting temperature medium'),(10,'ZZZ','Other'),(11,'PXT','PAXgene tissue'),(12,'RNL','RNA Later'),(13,'SNP','Snap freezing'),(14,'XXX','Unknown');
-    /*!40000 ALTER TABLE `fixation_stabilizations` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `fixation_times`
     --
@@ -119,12 +101,6 @@ data: # the actual contents - key-value pairs
     --
     -- Dumping data for table `fixation_times`
     --
-
-    LOCK TABLES `fixation_times` WRITE;
-    /*!40000 ALTER TABLE `fixation_times` DISABLE KEYS */;
-    INSERT INTO `fixation_times` VALUES (1,'A','< 15 min'),(2,'B','15 min-1 h'),(3,'C','1-4 h '),(4,'D','4-8 h'),(5,'E','8-24 h'),(6,'F','24-48 h'),(7,'G','48-72 h'),(8,'N','Not applicable'),(9,'X','Unknown'),(10,'Z','Other');
-    /*!40000 ALTER TABLE `fixation_times` ENABLE KEYS */;
-    UNLOCK TABLES;
 
     --
     -- Table structure for table `long_term_storages`
@@ -146,12 +122,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `long_term_storages`
     --
 
-    LOCK TABLES `long_term_storages` WRITE;
-    /*!40000 ALTER TABLE `long_term_storages` DISABLE KEYS */;
-    INSERT INTO `long_term_storages` VALUES (1,'Q','Bag','Liquid Nitrogen'),(2,'D','Cryotube 1 to 2 mL','(-85) to (-60) °C'),(3,'C','Cryotube 1 to 2 mL','Liquid Nitrogen'),(4,'N','Cryotube 1 to 2 mL','LN after temporary (-85) to (-60) °C'),(5,'E','Cryotube 1 to 2 mL','Programmable freezing to < -135 °C'),(6,'R','Dry technology medium','RT'),(7,'M','Microplate','(-35) to (-18) °C'),(8,'L','Microplate','(-85) to (-60) °C'),(9,'Y','Original primary container','(-35) to (-18) °C'),(10,'Y','Original Primary Container','(-85) to (-60) °C'),(11,'Z','Other','Other'),(12,'P','Paraffin Block','2 to 10 °C'),(13,'P','Paraffin Block','RT'),(14,'F','Plastic cryo straw','Liquid Nitrogen'),(15,'O','Plastic cryo straw','LN after temporary (-85) to (-60) °C'),(16,'K','PP tube >= 5 mL','(-35) to (-18) °C'),(17,'J','PP tube >= 5 mL','(-85) to (-60) °C'),(18,'B','PP tube 0.5 to 2 mL','(-35) to (-18) °C'),(19,'A','PP tube 0.5 to 2 mL','(-85) to (-60) °C'),(20,'V','PP tube 0.5 to 2 mL','< -135 °C'),(21,'T','PP tube 40 to 500 uL','(-35) to (-18) °C'),(22,'S','PP tube 40 to 500 uL','(-85) to (-60) °C'),(23,'W','PP tube 40 to 500 uL','< -135 °C'),(24,'H','Straw','(-35) to (-18) °C'),(25,'G','Straw','(-85) to (-60) °C'),(26,'I','Straw','Programmable freezing to < -135 °C'),(27,'X','Unknown','Unknown');
-    /*!40000 ALTER TABLE `long_term_storages` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `post_centrifugations`
     --
@@ -171,12 +141,6 @@ data: # the actual contents - key-value pairs
     --
     -- Dumping data for table `post_centrifugations`
     --
-
-    LOCK TABLES `post_centrifugations` WRITE;
-    /*!40000 ALTER TABLE `post_centrifugations` DISABLE KEYS */;
-    INSERT INTO `post_centrifugations` VALUES (1,'A','<1 h','2 to 10°C'),(2,'B','<1 h','RT'),(3,'I','>24 h','2 to 10°C'),(4,'J','>24 h','RT'),(5,'C','1 to 2 h','2 to 10°C'),(6,'D','1 to 2 h','RT'),(7,'E','2 to 8 h','2 to 10°C'),(8,'F','2 to 8 h','RT'),(9,'G','8 to 24 h','2 to 10°C'),(10,'H','8 to 24 h','RT'),(11,'N','N','2 to 10°C'),(12,'N','N','Other'),(13,'N','N','RT'),(14,'N','N','Unknown'),(15,'N','Not Applicable','Unknown'),(16,'Z','Other','Other'),(17,'X','Other','Unknown'),(18,'X','Unknown','Unknown'),(19,'X','Unknown','Other');
-    /*!40000 ALTER TABLE `post_centrifugations` ENABLE KEYS */;
-    UNLOCK TABLES;
 
     --
     -- Table structure for table `pre_centrifugations`
@@ -198,12 +162,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `pre_centrifugations`
     --
 
-    LOCK TABLES `pre_centrifugations` WRITE;
-    /*!40000 ALTER TABLE `pre_centrifugations` DISABLE KEYS */;
-    INSERT INTO `pre_centrifugations` VALUES (1,'B','< 2 h','2 to 10°C'),(2,'N','> 48 h','2 to 10°C'),(3,'J','12 to 24 h','2 to 10°C'),(4,'D','2 to 4 h','2 to 10°C'),(5,'L','24 to 48 h','2 to 10°C'),(6,'F','4 to 8 h','2 to 10°C'),(7,'H','8 to 12 h','2 to 10°C'),(8,'X','Unknown','2 to 10°C'),(9,'O','< 2 h','35 to 38°C'),(10,'X','Unknown','35 to 38°C'),(11,'X','Unknown','Other'),(12,'A','< 2 h','RT'),(13,'M','> 48 h','RT'),(14,'I','12 to 24 h','RT'),(15,'C','2 to 4 h','RT'),(16,'K','24 to 48 h','RT'),(17,'E','4 to 8 h','RT'),(18,'G','8 to 12 h','RT'),(19,'X','Unknown','RT'),(20,'X','Unknown','Unknown');
-    /*!40000 ALTER TABLE `pre_centrifugations` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `primary_containers`
     --
@@ -222,12 +180,6 @@ data: # the actual contents - key-value pairs
     --
     -- Dumping data for table `primary_containers`
     --
-
-    LOCK TABLES `primary_containers` WRITE;
-    /*!40000 ALTER TABLE `primary_containers` DISABLE KEYS */;
-    INSERT INTO `primary_containers` VALUES (1,'ACD','Acid citrate dextrose'),(2,'ADD','Chemical additives/stabilizers'),(3,'CAT','Serum tube without clot activator'),(4,'CPD','Citrate phosphate dextrose'),(5,'CPT','Cell Preparation Tube citrate'),(6,'CPH','Cell Preparation Tube heparin'),(7,'CSV','Aldehyde-based stabilizer for CTCs'),(8,'EDG','EDTA and gel'),(9,'FIL','Physical filtration system'),(10,'GLS','Glass'),(11,'HEP','Lithium Heparin'),(12,'HIR','Hirudin'),(13,'LHB','Lithium heparin and rubber plug'),(14,'LHG','Lithium heparin and gel'),(15,'ORG','Oragene collection container or equivalent'),(16,'OMN','Stool collection container with DNA stabilizer'),(17,'PAX','PAXgene blood RNA+'),(18,'PED','Potassium EDTA'),(19,'PET','Polyethylene tube sterile'),(20,'PI1','S8820 protease inhibitor tablets or equivalent'),(21,'PIX','Protease inhibitors'),(22,'PPS','Polypropylene tube sterile'),(23,'PXD','PAXgene blood DNA'),(24,'PXR','PAXgene bone marrow RNA'),(25,'RNL','RNA Later'),(26,'SCI','Sodium Citrate'),(27,'SCK','Nonaldehyde-bsaed stabilizer for cell-free nucleic acids'),(28,'SED','Sodium EDTA'),(29,'SHP','Sodium Heparin'),(30,'SPO','Sodium fluoride/potassium oxalate'),(31,'SST','Serum separator tube with clot activator'),(32,'TEM','Tempus Tube'),(33,'TRC','Trace elements tube'),(34,'XXX','Unknown'),(35,'ZZZ','Other');
-    /*!40000 ALTER TABLE `primary_containers` ENABLE KEYS */;
-    UNLOCK TABLES;
 
     --
     -- Table structure for table `sprec_samples`
@@ -285,12 +237,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `sprec_samples`
     --
 
-    LOCK TABLES `sprec_samples` WRITE;
-    /*!40000 ALTER TABLE `sprec_samples` DISABLE KEYS */;
-    INSERT INTO `sprec_samples` VALUES (1,'2019-08-08 13:19:51.000000',NULL,2,38,'CEN-A06-B-B-HST-C-D','2019-08-08 13:19:51.000000',2,NULL,2,1,3,4,NULL,NULL,NULL,NULL,2),(2,'2019-08-08 13:20:32.000000',NULL,2,38,'CEN-A06-B-B-ALL-B-D','2019-08-08 13:20:32.000000',2,NULL,2,1,2,3,NULL,NULL,NULL,NULL,2),(3,'2019-09-09 13:13:44.000000',NULL,1,39,'CLN-A12-B-B-ACA-G-T','2019-09-09 13:13:44.000000',21,NULL,2,2,7,7,NULL,NULL,NULL,NULL,2),(4,'2019-09-19 08:27:27.000000',NULL,3,2,'AMN-ADD-J-N-N-J-N','2019-09-19 08:27:27.000000',4,7,NULL,NULL,NULL,NULL,4,3,2,7,NULL),(5,'2019-09-30 14:24:19.000000',NULL,4,2,'AMN-CAT-B-C-C-B-X','2019-09-30 14:24:19.000000',27,2,NULL,NULL,NULL,NULL,2,1,3,2,NULL),(6,'2020-10-20 14:19:09.000000',NULL,5,2,'AMN-ACD-N-J-N-J-N','2020-10-20 14:19:09.000000',4,4,NULL,NULL,NULL,NULL,4,2,1,7,NULL);
-    /*!40000 ALTER TABLE `sprec_samples` ENABLE KEYS */;
-    UNLOCK TABLES;
-
     --
     -- Table structure for table `warm_ischemias`
     --
@@ -310,11 +256,6 @@ data: # the actual contents - key-value pairs
     -- Dumping data for table `warm_ischemias`
     --
 
-    LOCK TABLES `warm_ischemias` WRITE;
-    /*!40000 ALTER TABLE `warm_ischemias` DISABLE KEYS */;
-    INSERT INTO `warm_ischemias` VALUES (1,'A','< 2 min'),(2,'B','2-10 min'),(3,'C','10-20 min'),(4,'D','20-30 min'),(5,'E','30-60 min'),(6,'F','> 60 min'),(7,'X','Unknown'),(8,'N','Not applicable (e.g. biopsy)'),(9,'Z','Other');
-    /*!40000 ALTER TABLE `warm_ischemias` ENABLE KEYS */;
-    UNLOCK TABLES;
     /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
     /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -326,3 +267,205 @@ data: # the actual contents - key-value pairs
     /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
     -- Dump completed on 2022-07-17 14:17:06
+
+    INSERT INTO `centrifugations` (`id`, `temp`, `delay`, `speed`, `braking`, `acronym`)
+    VALUES
+      (2,'2 to 10°C','10 to 15 min','<3000g','no braking','C'),
+      (3,'20 to 10°C','10 to 15 min','<3000g','with braking','D'),
+      (4,'2 to 10°C','10 to 15 min','>10000g','with braking','J'),
+      (5,'2 to 10°C','10 to 15 min','3000g to 6000g','with braking','F'),
+      (6,'2 to 10°C','10 to 15 min','6000g to 10000g','with braking','H'),
+      (7,'No centrifugation','No centrifugation','No centrifugation','No centrifugation','N'),
+      (8,'Other','Other','Other','Other','Z'),
+      (9,'RT','10 to 15 min','<3000g','no braking','A'),
+      (10,'RT','10 to 15 min','<3000g','with braking','B'),
+      (11,'RT','10 to 15 min','>10000g','with braking','I'),
+      (12,'RT','10 to 15 min','3000g to 6000g','with braking','E'),
+      (13,'RT','10 to 15 min','6000g to 10000g','with braking','G'),
+      (14,'RT','30 min','<1000g','no braking','M'),
+      (15,'Unknown','Unknown','Unknown','Unknown','X');
+
+    INSERT INTO `collection_types` (`id`, `denomination`, `acronym`)
+    VALUES
+      (1,'Autopsy < 6 h post-mortem','A06'),
+      (2,'Autopsy 06-12 h post-mortem','A12'),
+      (3,'Autopsy 12-24 h post-mortem','A24'),
+      (4,'Autopsy 24-48 h post-mortem','A48'),
+      (5,'Autopsy 48-72 h post-portem','A72'),
+      (6,'Biopsy','BPS'),
+      (7,'Biopsy in culture media','BCM'),
+      (8,'Biopsy in normal saline or phosphate buffered saline','BSL'),
+      (9,'Biopsy in tissue low temperature transport media','BTM'),
+      (10,'Fine needle aspirate','FNA'),
+      (11,'Other','ZZZ'),
+      (12,'Punction','PUN'),
+      (13,'Surgical excision','SRG'),
+      (14,'Surgical excision in culture media','SCM'),
+      (15,'Surgical excision in normal saline or phosphate buffered saline','SSL'),
+      (16,'Surgical excision in tissue low temperature transport media','STM'),
+      (17,'Surgical excision in vacuum container','VAC'),
+      (18,'Swab','SWB');
+
+    INSERT INTO `fixation_stabilizations` (`id`, `denomination`, `acronym`)
+    VALUES
+      (1,'Alcohol-based','ETH'),
+      (2,'Aldehyde-based','ALD'),
+      (3,'Allprotect tissue reagent','ALL'),
+      (4,'Heat stabilization','HST'),
+      (5,'Neutral buffered formalin','NBF'),
+      (6,'Non-aldehyde based without acetic acid','NAA'),
+      (7,'Non-aldehyde with acetic acid','ACA'),
+      (8,'Non-buffered formalin','FOR'),
+      (9,'Optimum cutting temperature medium','OCT'),
+      (10,'Other','ZZZ'),
+      (11,'PAXgene tissue','PXT'),
+      (12,'RNA Later','RNL'),
+      (13,'Snap freezing','SNP'),
+      (14,'Unknown','XXX');
+
+    INSERT INTO `fixation_times` (`id`, `denomination`, `acronym`)
+    VALUES
+      (1,'< 15 min','A'),
+      (2,'15 min-1 h','B'),
+      (3,'1-4 h ','C'),
+      (4,'4-8 h','D'),
+      (5,'8-24 h','E'),
+      (6,'24-48 h','F'),
+      (7,'48-72 h','G'),
+      (8,'Not applicable','N'),
+      (9,'Unknown','X'),
+      (10,'Other','Z');
+
+    INSERT INTO `long_term_storages` (`id`, `container`, `temp`, `acronym`)
+    VALUES
+      (1,'Bag','Liquid Nitrogen','Q'),
+      (2,'Cryotube 1 to 2 mL','(-85) to (-60) °C','D'),
+      (3,'Cryotube 1 to 2 mL','Liquid Nitrogen','C'),
+      (4,'Cryotube 1 to 2 mL','LN after temporary (-85) to (-60) °C','N'),
+      (5,'Cryotube 1 to 2 mL','Programmable freezing to < -135 °C','E'),
+      (6,'Dry technology medium','RT','R'),
+      (7,'Microplate','(-35) to (-18) °C','M'),
+      (8,'Microplate','(-85) to (-60) °C','L'),
+      (9,'Original primary container','(-35) to (-18) °C','Y'),
+      (10,'Original Primary Container','(-85) to (-60) °C','Y'),
+      (11,'Other','Other','Z'),
+      (12,'Paraffin Block','2 to 10 °C','P'),
+      (13,'Paraffin Block','RT','P'),
+      (14,'Plastic cryo straw','Liquid Nitrogen','F'),
+      (15,'Plastic cryo straw','LN after temporary (-85) to (-60) °C','O'),
+      (16,'PP tube >= 5 mL','(-35) to (-18) °C','K'),
+      (17,'PP tube >= 5 mL','(-85) to (-60) °C','J'),
+      (18,'PP tube 0.5 to 2 mL','(-35) to (-18) °C','B'),
+      (19,'PP tube 0.5 to 2 mL','(-85) to (-60) °C','A'),
+      (20,'PP tube 0.5 to 2 mL','< -135 °C','V'),
+      (21,'PP tube 40 to 500 uL','(-35) to (-18) °C','T'),
+      (22,'PP tube 40 to 500 uL','(-85) to (-60) °C','S'),
+      (23,'PP tube 40 to 500 uL','< -135 °C','W'),
+      (24,'Straw','(-35) to (-18) °C','H'),
+      (25,'Straw','(-85) to (-60) °C','G'),
+      (26,'Straw','Programmable freezing to < -135 °C','I'),
+      (27,'Unknown','Unknown','X');
+
+    INSERT INTO `post_centrifugations` (`id`, `temp`, `delay`, `acronym`)
+    VALUES
+      (1,'2 to 10°C','<1 h','A'),
+      (2,'RT','<1 h','B'),
+      (3,'2 to 10°C','>24 h','I'),
+      (4,'RT','>24 h','J'),
+      (5,'2 to 10°C','1 to 2 h','C'),
+      (6,'RT','1 to 2 h','D'),
+      (7,'2 to 10°C','2 to 8 h','E'),
+      (8,'RT','2 to 8 h','F'),
+      (9,'2 to 10°C','8 to 24 h','G'),
+      (10,'RT','8 to 24 h','H'),
+      (11,'2 to 10°C','N','N'),
+      (12,'Other','N','N'),
+      (13,'RT','N','N'),
+      (14,'Unknown','N','N'),
+      (15,'Unknown','Not Applicable','N'),
+      (16,'Other','Other','Z'),
+      (17,'Unknown','Other','X'),
+      (18,'Unknown','Unknown','X'),
+      (19,'Other','Unknown','X');
+
+    INSERT INTO `pre_centrifugations` (`id`, `temp`, `delay`, `acronym`)
+    VALUES
+      (1,'2 to 10°C','< 2 h','B'),
+      (2,'2 to 10°C','> 48 h','N'),
+      (3,'2 to 10°C','12 to 24 h','J'),
+      (4,'2 to 10°C','2 to 4 h','D'),
+      (5,'2 to 10°C','24 to 48 h','L'),
+      (6,'2 to 10°C','4 to 8 h','F'),
+      (7,'2 to 10°C','8 to 12 h','H'),
+      (8,'2 to 10°C','Unknown','X'),
+      (9,'35 to 38°C','< 2 h','O'),
+      (10,'35 to 38°C','Unknown','X'),
+      (11,'Other','Unknown','X'),
+      (12,'RT','< 2 h','A'),
+      (13,'RT','> 48 h','M'),
+      (14,'RT','12 to 24 h','I'),
+      (15,'RT','2 to 4 h','C'),
+      (16,'RT','24 to 48 h','K'),
+      (17,'RT','4 to 8 h','E'),
+      (18,'RT','8 to 12 h','G'),
+      (19,'RT','Unknown','X'),
+      (20,'Unknown','Unknown','X');
+
+    INSERT INTO `primary_containers` (`id`, `denomination`, `acronym`)
+    VALUES
+      (1,'Acid citrate dextrose','ACD'),
+      (2,'Chemical additives/stabilizers','ADD'),
+      (3,'Serum tube without clot activator','CAT'),
+      (4,'Citrate phosphate dextrose','CPD'),
+      (5,'Cell Preparation Tube citrate','CPT'),
+      (6,'Cell Preparation Tube heparin','CPH'),
+      (7,'Aldehyde-based stabilizer for CTCs','CSV'),
+      (8,'EDTA and gel','EDG'),
+      (9,'Physical filtration system','FIL'),
+      (10,'Glass','GLS'),
+      (11,'Lithium Heparin','HEP'),
+      (12,'Hirudin','HIR'),
+      (13,'Lithium heparin and rubber plug','LHB'),
+      (14,'Lithium heparin and gel','LHG'),
+      (15,'Oragene collection container or equivalent','ORG'),
+      (16,'Stool collection container with DNA stabilizer','OMN'),
+      (17,'PAXgene blood RNA+','PAX'),
+      (18,'Potassium EDTA','PED'),
+      (19,'Polyethylene tube sterile','PET'),
+      (20,'S8820 protease inhibitor tablets or equivalent','PI1'),
+      (21,'Protease inhibitors','PIX'),
+      (22,'Polypropylene tube sterile','PPS'),
+      (23,'PAXgene blood DNA','PXD'),
+      (24,'PAXgene bone marrow RNA','PXR'),
+      (25,'RNA Later','RNL'),
+      (26,'Sodium Citrate','SCI'),
+      (27,'Nonaldehyde-bsaed stabilizer for cell-free nucleic acids','SCK'),
+      (28,'Sodium EDTA','SED'),
+      (29,'Sodium Heparin','SHP'),
+      (30,'Sodium fluoride/potassium oxalate','SPO'),
+      (31,'Serum separator tube with clot activator','SST'),
+      (32,'Tempus Tube','TEM'),
+      (33,'Trace elements tube','TRC'),
+      (34,'Unknown','XXX'),
+      (35,'Other','ZZZ');
+
+    INSERT INTO `warm_ischemias` (`id`, `denomination`, `acronym`)
+    VALUES
+      (1,'< 2 min','A'),
+      (2,'2-10 min','B'),
+      (3,'10-20 min','C'),
+      (4,'20-30 min','D'),
+      (5,'30-60 min','E'),
+      (6,'> 60 min','F'),
+      (7,'Unknown','X'),
+      (8,'Not applicable (e.g. biopsy)','N'),
+      (9,'Other','Z');
+
+    INSERT INTO `sprec_samples` (`id`, `sample_id`, `sprec`, `sample_type`, `collection_type`, `primary_container`, `pre_centrifugation`, `post_centrifugation`, `centrifugation`, `second_centrifugation`, `long_term_storage`, `warm_ischemia`, `cold_ischemia`, `fixation_type`, `fixation_time`, `created_at`, `updated_at`, `deleted_at`)
+    VALUES
+      (1,2,'CEN-A06-B-B-HST-C-D',38,1,NULL,NULL,NULL,NULL,NULL,2,2,2,4,3,'2019-08-08 13:19:51','2019-08-08 13:19:51',NULL),
+      (2,2,'CEN-A06-B-B-ALL-B-D',38,1,NULL,NULL,NULL,NULL,NULL,2,2,2,3,2,'2019-08-08 13:20:32','2019-08-08 13:20:32',NULL),
+      (3,1,'CLN-A12-B-B-ACA-G-T',39,2,NULL,NULL,NULL,NULL,NULL,21,2,2,7,7,'2019-09-09 13:13:44','2019-09-09 13:13:44',NULL),
+      (4,3,'AMN-ADD-J-N-N-J-N',2,NULL,2,3,4,7,7,4,NULL,NULL,NULL,NULL,'2019-09-19 08:27:27','2019-09-19 08:27:27',NULL),
+      (5,4,'AMN-CAT-B-C-C-B-X',2,NULL,3,1,2,2,2,27,NULL,NULL,NULL,NULL,'2019-09-30 14:24:19','2019-09-30 14:24:19',NULL),
+      (6,5,'AMN-ACD-N-J-N-J-N',2,NULL,1,2,4,4,7,4,NULL,NULL,NULL,NULL,'2020-10-20 14:19:09','2020-10-20 14:19:09',NULL);
