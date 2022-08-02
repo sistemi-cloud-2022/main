@@ -1,12 +1,13 @@
 #!/bin/bash
+kubectl apply -f keycloak.yml
 
-# kubectl apply -f keycloak.yml
+kubectl apply -f keycloak-2.yml
 
 # kubectl apply -f biobank-be-deployment.yaml
 # kubectl apply -f biobank-be-service.yaml 
 
-kubectl apply -f donor-be-deployment.yaml 
-kubectl apply -f donor-be-service.yaml
+# kubectl apply -f donor-be-deployment.yaml 
+# kubectl apply -f donor-be-service.yaml
 
 # kubectl apply -f sample-be-deployment.yaml
 # kubectl apply -f sample-be-service.yaml

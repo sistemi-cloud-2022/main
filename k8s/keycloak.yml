@@ -10,7 +10,7 @@ spec:
   ports:
   - name: http
     port: 8180
-    targetPort: 8180
+    targetPort: 8080
   selector:
     app: keycloak
 ---
@@ -34,6 +34,7 @@ spec:
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:18.0.2
+        # FIXME: Dai logs si denota che questi comandi NON possono essere utilizzati
         args: ["start-dev", "--http-relative-path", "/auth"]
         env:
         - name: KEYCLOAK_ADMIN
@@ -46,14 +47,14 @@ spec:
         #   value: /import/realm.json
         ports:
         - name: http
-          containerPort: 8180
+          containerPort: 8080
         # volumeMounts:
         #   - name: keycloak-volume
         #     mountPath: /import
         readinessProbe:
           httpGet:
             path: /auth/realms/master
-            port: 8180
+            port: 8080
       # volumes:
       #   - name: keycloak-volume
       #     configMap:

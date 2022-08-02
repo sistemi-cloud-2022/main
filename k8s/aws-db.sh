@@ -1,10 +1,6 @@
 #!/bin/bash
 
 kubectl create namespace biobanksprec
-# kubectl create namespace donor
-# kubectl create namespace sample
-# kubectl create namespace shipment
-# kubectl create namespace sprecsample
 
 kubectl apply -f biobank-db-config.yaml
 kubectl apply -f biobank-db.yaml
