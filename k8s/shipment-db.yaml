@@ -90,6 +90,7 @@ metadata:
   name: shipment-db-service # nome relativo a quello di configuraizone
   namespace: biobanksprec
 spec:
+  type: NodePort
   selector:
     app: shipment-mysql  # select pods to forward the request to ...
   ports:

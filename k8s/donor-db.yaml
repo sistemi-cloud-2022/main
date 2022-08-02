@@ -89,6 +89,7 @@ metadata:
   name: donor-db-service # nome relativo a quello di configuraizone
   namespace: biobanksprec
 spec:
+  type: NodePort
   selector:
     app: donor-mysql  # select pods to forward the request to ...
   ports:

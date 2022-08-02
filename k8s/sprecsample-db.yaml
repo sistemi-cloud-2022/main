@@ -91,6 +91,7 @@ metadata:
   name: sprecsample-db-service # nome relativo a quello di configuraizone
   namespace: biobanksprec
 spec:
+  type: NodePort
   selector:
     app: sprecsample-mysql  # select pods to forward the request to ...
   ports:
