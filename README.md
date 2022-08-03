@@ -4,7 +4,8 @@ Progetto sviluppato per Sistemi Cloud (Università degli studi di Catania, Infor
 <ul>
   <li>Autenticazione delle API gestita con Keycloak</i>
   <li>GitHub actions per il deploy delle immagini su DockerHub</li>
-  <li>Kubernetes (EKS su AWS)</li>
+  <li>Kubernetes</li>
+  <li>Deploy su AWS (EKS)</li>
 </ul>
 
 ## Script utili
@@ -76,15 +77,7 @@ cp backup.sql DIR_DEST | docker exec -i CONTAINER_ID /usr/bin/mysql -u admin --p
 <b>Attenzione:</b> se si volesse eseguire l'intero progetto utilizzando le immagini buildate delle repository, è necessario sostituire le immagini del `docker-compose` della folder di `development` con quelle buildate localmente
 
 
-## Kubernetes & Minikube
-
-Create and start the cluster 
-
-    minikube start --driver docker
-
-See if everything is running properly
-
-    minikube status
+## Kubernetes
 
 Display all nodes in cluster
 
@@ -177,18 +170,17 @@ Login aws-cli
 
     aws ecr get-login-password --region <REGION> | docker login --username AWS --password-stdin <AWS_ID_ACCOUNT>.dkr.ecr.<REGION>.amazonaws.com
 
-Creazione di un cluster
+Creazione di un cluster (è possibile attendere anche più di 15 minuti)
 
     eksctl create cluster --name <CLUSTER-NAME> --version <VERSION-K8S> --region <REGION> --nodegroup-name <NODEGROUP_NAME> --node-type <NODE-TYPE> --nodes <N_NODES>
 
 Example:
 
-    eksctl create cluster --name biobank-sprec-cluster --version 1.22 --region us-east-1 --nodegroup-name linux-nodes --node-type t2.xlarge --nodes 4
+    eksctl create cluster --name biobank-sprec-v1 --version 1.22 --region eu-central-1 --nodegroup-name linux-nodes --node-type t2.medium --nodes 2
 
 Delete a cluster
 
     eksctl delete nodegroup --cluster <CLUSTER_NAME> --region <CODE_REGION> --name linux-nodes
-
 
 Visualizzo i cluster disponibili
 
@@ -201,7 +193,6 @@ Visualizzo i cluster disponibili
 Creo un namespace per ogni tipo di servizio:
 
     kubectl create namespace <NAMESPACE_NAME>
-
 
 Get current context:
 
@@ -217,7 +208,7 @@ Switch context:
 
 Allocare la porta ed effettuare il forward sul localhost (Utile quando il LoadBalancer è in pending o si setta una NodePort )
 
-k8 port-forward svc/keycloak 8180:8180 -n biobanksprec
+        k8 port-forward svc/<SERVICE_NAME> <PORT>:<PORT> -n <NAMESPACE>
 
 
 
