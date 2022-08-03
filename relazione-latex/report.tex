@@ -18,7 +18,7 @@
 BiobankSPREC Microservices \\ 
 \large Progetto Sistemi Cloud e Laboratorio (LM-18) \\ Università degli Studi di Catania - A.A 2021/2022 \\
 }
-\author{ Danilo Leocata - 1000022576 \\ Docenti: Giuseppe Pappalardo, Andrea Fornaia}
+\author{ Danilo Leocata - 1000022576 \\ Alessio Angelo Liotta - 1000012434 \\Docenti: Giuseppe Pappalardo, Andrea Fornaia}
 \date{\today}
 
 %----------------------------------------------------------------------------------------
@@ -34,11 +34,16 @@ BiobankSPREC Microservices \\
 %----------------------------------------------------------------------------------------
 
 
-
 \section{Introduzione}
 
-È stato preso in esame un progetto a microservizi (TODO: inserisci di cosa parla) realizzato precedentemente dal collega.
-L'intero progetto è disponibile al seguente link GitHub: \href{https://github.com/sistemi-cloud-2022}{https://github.com/sistemi-cloud-2022}.
+È stato preso in esame un progetto a microservizi realizzato precedentemente. Il dominio del problema proposto è un sistema (Biobanca) che si occupa di
+memorizzare i dati relativi a campioni biologici.
+Tale sistema oltre ad occuparsi della memorizzazione delle informazionisui campioni
+biologici, implementa l’autenticazione e il controllo degli accessi (quindi avremo
+tabelle come utenti, ruoli e permessi associati), la gestione delle spedizioni dei
+campioni biologici, l’archiviazione delle informazioni sui donatori e le
+informazioni sulla biobanca stessa (ad esempio, dove verranno conservati i campioni
+veri e propri). L'intero progetto è disponibile al seguente link GitHub: \href{https://github.com/sistemi-cloud-2022}{https://github.com/sistemi-cloud-2022}.
 
 \begin{center}
     \includegraphics[width=0.6\linewidth]{architettura.png}
@@ -48,12 +53,13 @@ L'intero progetto è disponibile al seguente link GitHub: \href{https://github.c
 
 È stato trovato più opportuno, iniziare ad effettuare un primo refactoring del progetto.
 In particolare è stata prevista la suddivisione dei microservizi, ed i relativi database, in repository separate in modo da scindere il deploy di database e relativo microservizio associato.
+Le referenze dei tool descritti nella seguente relazione sono stati inseriti nel capitolo delle references.
 Tutte le configurazioni (come quella di Keycloak, ad esempio) e le documentazioni generali sono state inserite all’interno della repository \texttt{main}. Per agevolare lo sviluppo ed i test sono stati implementati due script bash, nel dettaglio:
 
 \begin{enumerate}
     \item {\texttt{setup-dev.sh}: crea una cartella \texttt{development}, al cui interno effettua i clone delle repository, prepara i file in modo da renderli eseguibili per il \texttt{docker-compose}, effettua la build del microservizi con \texttt{maven} e
-        copia tutti i file necessari per la configurazione  dentro la cartella \texttt{imports}}
-    \item {\texttt{update-repo.sh}: script che effettua pull del \texttt{main} in tutti i branch e ne effettua le build}
+        copia tutti i file necessari per la configurazione  dentro la cartella \texttt{imports}};
+    \item {\texttt{update-repo.sh}: script che effettua pull del \texttt{main} in tutti i branch e ne effettua le build}.
 \end{enumerate}
 
 In generale, sono stati effettuati i seguenti miglioramenti su ogni microservizio:
@@ -265,28 +271,36 @@ Per ulteriori approfondimenti sugli eventuali utilizzi sono state citate le pagi
 \section{Git actions}
 
 Successivamente, è stato ritenuto opportuno ai fini di un buon flusso di sviluppo, integrare delle \textit{git actions} nei vari repository.
-Nel dettaglio, è stata implementata una action, denominata \textbf{Create action build and push on Docker Hub} su ogni repo di ogni microservizio, che entra in azione ogni volta che viene effettuato un commit nel 
-branch \texttt{main} che, in ordine:
+Nel dettaglio, è stata implementata una action, denominata \textbf{Create action build and push on Docker Hub} per ogni microservizio, che entra in azione ogni volta che viene effettuato un commit nel 
+branch \texttt{main} che. In ordine, gli step sono i seguenti:
 
 \begin{enumerate}
-    \item Effettua la build del microservizio;
+    \item Effettua la build del microservizio utilizzando \texttt{maven};
     \item Crea l'immagine docker del microservizio e la pusha sul repository GitHub
 \end{enumerate}
 
 \section{Kubernetes}
 
+TODO: Inserire perché stiamo utilizzando kubernetes
+
+
+\textit{
 Nonostante aver organizzato il flusso di sviluppo, ed in parte quello di deploy, in un ambiente di produzione, è necessario garantire che non si verifichino interruzioni
 dei servizi, per esempio, causati dall'interruzione di un container o da un aggiornamento. Nel primo caso, ad esempio, è necessario avviare un nuovo
-container. Kubernetes ti fornisce un framework per far funzionare i sistemi distribuiti in modo resiliente, ad esempio, gestendo
-tutti quei comportamenti in maniera automatica. Kubernetes si occupa della scalabilità, failover, distribuzione. Tra i servizi forniti troviamo:
+container. Kubernetes fornisce un framework per far funzionare i sistemi distribuiti in modo resiliente, ad esempio, gestendo
+tutti quei comportamenti in maniera automatica. Kubernetes si occupa della scalabilità, failover, distribuzione. 
+}
+
+
+Tra i servizi forniti troviamo:
 
 \begin{enumerate} 
-    \item \textbf{Scoperta dei servizi e bilanciamento del carico} k8s può esporre un container usando un nome DNS o il suo indirizzo IP. Se il traffico verso un container è alto, Kubernetes è in grado di distribuire il traffico su più container in modo che il servizio rimanga stabile.
-    \item \textbf{Orchestrazione dello storage} permette di montare automaticamente un sistema di archiviazione di vostra scelta, come per esempio storage locale, dischi forniti da cloud pubblici, e altro ancora.
-    \item \textbf{Rollout e rollback automatizzati} può essere utilizzato per descrivere lo stato desiderato per i propri container e si occuperà inoltre di cambiare lo stato attuale per raggiungere quello desiderato ad una velocità controllata. Per esempio, puoi automatizzare Kubernetes per creare nuovi container per il tuo servizio, rimuovere i container esistenti e adattare le loro risorse a quelle richieste dal nuovo container.
-    \item \textbf{Ottimizzazione dei carichi} Fornisci a Kubernetes un cluster di nodi per eseguire i container. Puoi istruire Kubernetes su quanta CPU e memoria (RAM) ha bisogno ogni singolo container. Kubernetes allocherà i container sui nodi per massimizzare l'uso delle risorse a disposizione.
-    \item \textbf{Self-healing} Kubernetes riavvia i container che si bloccano, sostituisce container, termina i container che non rispondono agli health checks, e evita di far arrivare traffico ai container che non sono ancora pronti per rispondere correttamente.
-    \item \textbf{Gestione di informazioni sensibili e della configurazione} Kubernetes consente di memorizzare e gestire informazioni sensibili, come le password, i token OAuth e le chiavi SSH. Puoi distribuire e aggiornare le informazioni sensibili e la configurazione dell'applicazione senza dover ricostruire le immagini dei container e senza svelare le informazioni sensibili nella configurazione del tuo sistema.
+    \item \textbf{Scoperta dei servizi e bilanciamento del carico}: k8s può esporre un container usando un nome DNS o il suo indirizzo IP. Se il traffico verso un container è alto, Kubernetes è in grado di distribuire il traffico su più container in modo che il servizio rimanga stabile;
+    \item \textbf{Orchestrazione dello storage}: permette di montare automaticamente un sistema di archiviazione a scelta, come per esempio storage locale, dischi forniti da cloud pubblici e altro ancora;
+    \item \textbf{Rollout e rollback automatizzati}: può essere utilizzato per descrivere lo stato desiderato per i propri container e si occuperà inoltre di cambiare lo stato attuale per raggiungere quello desiderato ad una velocità controllata. Per esempio, è possibile automatizzare Kubernetes per creare nuovi container per il tuo servizio, rimuovere i container esistenti e adattare le loro risorse a quelle richieste dal nuovo container;
+    \item \textbf{Ottimizzazione dei carichi}: fornisce a Kubernetes un cluster di nodi per eseguire i container. Puoi istruire Kubernetes su quanta CPU e memoria (RAM) ha bisogno ogni singolo container. Kubernetes allocherà i container sui nodi per massimizzare l'uso delle risorse a disposizione;
+    \item \textbf{Self-healing}: kubernetes riavvia i container che si bloccano, sostituisce container, termina i container che non rispondono agli health checks, e evita di far arrivare traffico ai container che non sono ancora pronti per rispondere correttamente;
+    \item \textbf{Gestione di informazioni sensibili e della configurazione}: kubernetes consente di memorizzare e gestire informazioni sensibili, come le password, i token OAuth e le chiavi SSH. Puoi distribuire e aggiornare le informazioni sensibili e la configurazione dell'applicazione senza dover ricostruire le immagini dei container e senza svelare le informazioni sensibili nella configurazione del tuo sistema;
 \end{enumerate}
 
 Per prima cosa, è stata dedicata attenzione alla creazione del db. Come già implementato nel docker-compose,

@@ -4,7 +4,6 @@ metadata:
     name: sprecsample-be-service
     namespace: biobanksprec
 spec:
-    type: NodePort # eventualmente usa loadBalancer per prendere l'IP metto il loadbalancer e quindi lo chiamo da usalo solo keycloak
     ports:
     - port: 9094
     selector:

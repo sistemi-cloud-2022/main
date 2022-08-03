@@ -3,8 +3,12 @@ kind: Service
 metadata:
     name: sample-be-service
     namespace: biobanksprec
+    annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: external
+        service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
 spec:
-    type: NodePort
+    type: LoadBalancer
     ports:
     - port: 9092
     selector:

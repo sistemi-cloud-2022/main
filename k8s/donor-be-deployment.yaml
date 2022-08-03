@@ -21,7 +21,6 @@ spec:
       containers:
         - name: donor-be
           image: khalld/donor:latest
-          imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 9095
           env:

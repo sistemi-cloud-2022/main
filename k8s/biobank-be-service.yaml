@@ -4,7 +4,6 @@ metadata:
     name: biobank-be-service
     namespace: biobanksprec
 spec:
-    type: NodePort
     ports:
     - port: 9093 
     selector:

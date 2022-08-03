@@ -202,6 +202,7 @@ Creo un namespace per ogni tipo di servizio:
 
     kubectl create namespace <NAMESPACE_NAME>
 
+
 Get current context:
 
     kubectl config current-context
@@ -214,12 +215,10 @@ Switch context:
 
     kubectl config use-context <CONTEXT_NAME>
 
-Creazione repository dove pushare le immagini (Facoltativo)
+Allocare la porta ed effettuare il forward sul localhost (Utile quando il LoadBalancer è in pending o si setta una NodePort )
 
-    aws ecr create-repository \
-        --repository-name biobank-sprec \
-        --image-scanning-configuration scanOnPush=true \
-        --region us-east-1
+k8 port-forward svc/keycloak 8180:8180 -n biobanksprec
+
 
 
 - [Getting started AWS](https://docs.aws.amazon.com/AmazonECR/latest/userguide/getting-started-cli.html)

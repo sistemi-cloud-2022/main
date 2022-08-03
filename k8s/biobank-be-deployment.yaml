@@ -18,7 +18,6 @@ spec:
       containers:
         - name: biobank-be
           image: khalld/biobank:latest
-          imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 9095
           env:

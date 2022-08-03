@@ -3,8 +3,12 @@ kind: Service
 metadata:
     name: shipment-be-service
     namespace: biobanksprec
+    annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: external
+        service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
 spec:
-    type: NodePort # eventualmente usa loadBalancer per prendere l'IP metto il loadbalancer e quindi lo chiamo da usalo solo keycloak
+    type: LoadBalancer # eventualmente usa loadBalancer per prendere l'IP metto il loadbalancer e quindi lo chiamo da usalo solo keycloak
     ports:
     - port: 9091
     selector:
