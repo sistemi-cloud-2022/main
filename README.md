@@ -1,4 +1,4 @@
-# sistemi-cloud-unict-2022
+# Biobanksprec
 
 Progetto sviluppato per Sistemi Cloud (Università degli studi di Catania, Informatica Magistrale LM-18 A.A. 2021/2022). Si propone il refactoring ed il deploy su AWS di un progetto a microservizi tra cui l'integrazione le seguenti tecnologie:
 <ul>
@@ -7,6 +7,64 @@ Progetto sviluppato per Sistemi Cloud (Università degli studi di Catania, Infor
   <li>Kubernetes</li>
   <li>Deploy su AWS (EKS)</li>
 </ul>
+
+## Avvio tramite docker-compose
+
+1. Assicurarsi di essere dentro la cartella <i>main</i>
+2. Eseguire il setup del progetto lanciando il comando `./setup-dev.sh`
+3. Spostarsi sulla cartella generata <i>development</i> ed eseguire il comando
+`docker-compose up`
+
+## Avvio tramite kubernetes
+
+1. Assicurarsi di essere dentro la cartella `main/k8s/`
+2. Lanciare prima il setup dei database con il comando `./aws-db.sh`
+4. Successivamente lanciare il setup dei servizi con il comando `./aws-be.sh`
+5. Lanciare il comando `kubectl get pods -n biobanksprec` e assicurasi che tutti
+i pod siano in stato di running
+6. Lanciare il comando `kubectl get svc -n biobanksprec` assicurasi che tutti i
+servizi siano presenti.
+
+## Test comunicazione tra microservizi
+
+Prima di verificare il corretto funzionamento delle <i>api call</i> che testano la comunicazione tra i microservizi, bisogna ottenere il <b>token</b> da passare a ciascuna di esse.
+
+1. Aprire il browser e andare su `http://localhost:8180/auth`
+2. Accedere utilizzando sia come <b>username</b> che <b>password</b> “admin”
+3. Sul menu a sinistra passare il mouse su <i>Biobank</i> e cliccare su <b>add realm</b>
+4. Importare il file `realm.json` che trovate nella cartella `main/keycloack/imports/`
+5. Sul menu a sinistra andare sulla voce <i>Users</i> e creare un utente inserendo solo
+la username. Una volta cliccalto su save, andate sulla tab <i>Credentials</i> e
+impostate la password per l’utente appena creato.
+6. Fatto ciò, andare nella tab <i>Role Mappings</i> e assegnare all’utente i ruoli creati
+per ogni servizio, identificati dal `client_id`.
+
+
+Infine, eseguire una richiesta POST definita nel seguente modo:
+<b>URL</b>: http://localhost:8180/auth/realms/Biobank/protocol/openid-connect/token <b>Headers</b>: Content-Type: application/x-www-form-urlencoded'
+<b>Body</b>:
+
+```
+client_id=sample
+username=user (Utente creato in precedenza)
+password=password (Password creata in precedenza)
+grant_type=password
+```
+
+In risposta alla seguente richiesta otteniamo l’<i>access token</i> che bisogna incorporare nelle richieste mostrate di seguito per testare la corretta comunicazione tra i microservizi.
+- <b>Sample</b>
+    - Creazione di un campione biologico:
+http://localhost:9092/sample/samples/ [POST]
+        - <b>Payload</b>
+        - `{ "userId": "1", "sampleId": "sample-example", "locationId":
+                    "1","donorId":"13", "consentId":"1","typeId": {"id":"20"} }`
+- <b>Shipment</b>
+    - Creazione di una spedizione relativa ad un campione specifico:
+http://localhost:9091/shipment/shipmentsBoxes/?sampleId=1 [POST]
+        - <b>Payload</b>
+        - `{ "boxId": "example-box", "locationId": 9, "name": "example-name", "shipmentId": {"id": 1}, "statusId": {"id": 1} }`
+
+
 
 ## Script utili
 
@@ -119,7 +177,7 @@ Entrare in bash all'interno di un pod DB mysql:
 
     kubectl exec --stdin --tty POD_NAME -- /bin/bash
 
-`mysql -p` com password `root`
+`mysql -p` con password `root`
 
 Get basic info about k8s components
 
@@ -141,16 +199,6 @@ Get detailed info about a specific component
 get application logs
 
     kubectl logs {pod-name}
-    
-stop your Minikube cluster
-
-    minikube stop
-
-> :warning: **Known issue - Minikube IP not accessible** 
-
-If you can't access the NodePort service webapp with `MinikubeIP:NodePort`, execute the following command:
-    
-    minikube service pod-service
 
 ### Tips: shortcuts!
 
@@ -165,6 +213,10 @@ If you can't access the NodePort service webapp with `MinikubeIP:NodePort`, exec
 <br/>
 
 ## AWS
+
+- [Getting started AWS](https://docs.aws.amazon.com/AmazonECR/latest/userguide/getting-started-cli.html)
+- [EKS cluster connection](https://aws.amazon.com/it/premiumsupport/knowledge-center/eks-cluster-connection/)
+
 
 Login aws-cli
 
@@ -208,13 +260,7 @@ Switch context:
 
 Allocare la porta ed effettuare il forward sul localhost (Utile quando il LoadBalancer è in pending o si setta una NodePort )
 
-        k8 port-forward svc/<SERVICE_NAME> <PORT>:<PORT> -n <NAMESPACE>
-
-
-
-- [Getting started AWS](https://docs.aws.amazon.com/AmazonECR/latest/userguide/getting-started-cli.html)
-- [EKS cluster connection](https://aws.amazon.com/it/premiumsupport/knowledge-center/eks-cluster-connection/)
-
+    k8 port-forward svc/<SERVICE_NAME> <PORT>:<PORT> -n <NAMESPACE>
 
 
 
