@@ -6,7 +6,7 @@ metadata:
   labels:
     app: biobank-be
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: biobank-be

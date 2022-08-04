@@ -36,9 +36,9 @@ BiobankSPREC Microservices \\
 
 \section{Introduzione}
 
-È stato preso in esame un progetto a microservizi realizzato precedentemente. Il dominio del problema proposto è un sistema (Biobanca) che si occupa di
+Il dominio del problema proposto è un sistema (Biobanca) che si occupa di
 memorizzare i dati relativi a campioni biologici.
-Tale sistema oltre ad occuparsi della memorizzazione delle informazionisui campioni
+Tale sistema oltre ad occuparsi della memorizzazione delle informazioni sui campioni
 biologici, implementa l’autenticazione e il controllo degli accessi (quindi avremo
 tabelle come utenti, ruoli e permessi associati), la gestione delle spedizioni dei
 campioni biologici, l’archiviazione delle informazioni sui donatori e le
@@ -51,15 +51,18 @@ veri e propri). L'intero progetto è disponibile al seguente link GitHub: \href{
 \end{center}
 
 
-È stato trovato più opportuno, iniziare ad effettuare un primo refactoring del progetto.
-In particolare è stata prevista la suddivisione dei microservizi, ed i relativi database, in repository separate in modo da scindere il deploy di database e relativo microservizio associato.
+Lo step iniziale è stato effettuare un refactoring strutturale del progetto.
+In particolare è stata prevista la suddivisione dei microservizi, ed i relativi database, in repository separate, in modo da scindere il deploy di ciascuno database e il relativo microservizio associato.
 Le referenze dei tool descritti nella seguente relazione sono stati inseriti nel capitolo delle references.
-Tutte le configurazioni (come quella di Keycloak, ad esempio) e le documentazioni generali sono state inserite all’interno della repository \texttt{main}. Per agevolare lo sviluppo ed i test sono stati implementati due script bash, nel dettaglio:
+Tutte le configurazioni (come quella di Keycloak, ad esempio) e le documentazioni generali sono state inserite all’interno della repository \texttt{main}. Per automatizzare il flusso di deployment del progetto sono stati implementati diversi script bash, nel dettaglio:
 
 \begin{enumerate}
-    \item {\texttt{setup-dev.sh}: crea una cartella \texttt{development}, al cui interno effettua i clone delle repository, prepara i file in modo da renderli eseguibili per il \texttt{docker-compose}, effettua la build del microservizi con \texttt{maven} e
-        copia tutti i file necessari per la configurazione  dentro la cartella \texttt{imports}};
-    \item {\texttt{update-repo.sh}: script che effettua pull del \texttt{main} in tutti i branch e ne effettua le build}.
+    \item {\texttt{setup-dev.sh}: crea la cartella \texttt{development}, al cui interno vengono clonati i repository, assegna ai file di scripting i permessi di esecuzione, effettua la build delle immagini dei microservizi con \texttt{./build-all.sh} e
+        copia tutti i file necessari per la configurazione di keycloak dentro la cartella \texttt{imports}};
+    \item {\texttt{update-repo.sh}: script che effettua il pull del \texttt{main} in tutti i branch e ne effettua le build}.
+    \item {\texttt{aws-db.sh}: script che crea il namespace e effettua il deploy su \texttt{kubertenes} di ogni database}.
+    \item {\texttt{aws-be.sh}: script che effettua il deploy su \texttt{kubertenes} di ogni microservizio, incluso keycloak}.
+    \item {\texttt{restore-k8s.sh}: script che butta giù il deploy su \texttt{kubertenes}}.
 \end{enumerate}
 
 In generale, sono stati effettuati i seguenti miglioramenti su ogni microservizio:
@@ -67,20 +70,20 @@ In generale, sono stati effettuati i seguenti miglioramenti su ogni microservizi
 \begin{enumerate}
     \item {Il microservizio di authentication è stato sostituito in favore di Keycloak; }
     \item {Sono stati estratti, dai rispettivi container docker, le tabelle ed i dati su file \texttt{.sql} (inizialmente il db veniva inizializzato a run-time durante l'avvio del microservizio);}
-    \item {I file \texttt{pom.xml} sono stati stato revisionati ed aggiornati;}
+    \item {I file \texttt{pom.xml} sono stati revisionati ed aggiornati;}
     \item {Il formato delle API è stato cambiato da \textit{camelCase} ad \textit{hypenate}}
     \item {Per ogni repository è stato implementato un \texttt{docker-compose.yaml}}
-    \item {I file \texttt{application.properties} sono stati stato convertiti in formato \texttt{.yml} e splittato in \texttt{dev}, per lo sviluppo, e \texttt{prod} per il deploy.}
+    \item {I file \texttt{application.properties} sono stati stato convertiti in formato \texttt{.yml}, creando due profili:  \texttt{dev}, per lo sviluppo, e \texttt{prod} per il deploy.}
     \item {Sono state implementate le \textbf{Git Actions} }
     \item {Orchestrazione dei microservizi con \textbf{Kubernetes}}
+    \item {Il deploy su \textbf{Amazon Web Services}}
 \end{enumerate}
 
 
 \section{Keycloak}
 
-% TODO: Viene utilizzato un DB mysql per il Docker-compose mentre un H2 di default per il deploy con k8s.
 
-Il primo step è stato quello di sostituire il microservizio di autenticazione con Keyacloak. Keycloak è un
+Il primo step è stato quello di sostituire il microservizio di autenticazione con Keycloak. Keycloak è un
 prodotto software open source che abilita il Single Sign-On (IdP) con Identity Management e
 Access Management per applicazioni e servizi moderni. Questo software è scritto in Java e
 supporta i protocolli di federazione delle identità per impostazione predefinita SAML v2 e
@@ -259,8 +262,6 @@ Si nota che i messaggi di ritorno possono essere personalizzati in base alle pro
 La configurazione dell'intero realm \texttt{Biobank} sarà importata automaticamente all'avvio di Keycloak. Oltre ai parametri di configurazione \texttt{application.yaml} è stato necessario importare la classe
 \texttt{KeycloakConfig} ed estendere la \texttt{SecurityConfig} con il \texttt{KeycloakWebSecurityConfigurerAdapter}, oltre ad importare la seguente dipendenza sul \texttt{pom.xml}
 
-% TODO: Necessario spiegare che viene implementato nelle securityConfig il KeycloakRestTemplate
-% Aggiungere che utilizzandolo in questo modo Shipment e Sample non hanno bisogno di ......
 
 \begin{verbatim}
     <dependency>
@@ -269,7 +270,8 @@ La configurazione dell'intero realm \texttt{Biobank} sarà importata automaticam
     </dependency>
 \end{verbatim}
 
-Per ulteriori approfondimenti sugli eventuali utilizzi sono state citate le pagine di documentazione nelle reference a fine relazione.
+Ricordiamo che, la comunicazione tra i vari microservizi avviene in modo sincrono per mezzo di chiamate REST, utilizzando la classe \texttt{RestTemplate} nei microservizi di orchestrazione \texttt{Sample} e \texttt{Shipment}.
+Adesso che le richieste sono protette da autenticazione, è necessario che gli orchestratori inviino una richiesta fornita di un token valido di autorizzaione. Per semplificare il processo di propagazione del token è stato sostituito \texttt{RestTemplate} con \texttt{KeycloakRestTemplate}, in modo che si preoccupi lui di quanto appena detto.
 
 \pagebreak
 
@@ -286,13 +288,11 @@ branch \texttt{main} che. In ordine, gli step sono i seguenti:
 
 \section{Kubernetes}
 
-TODO: Inserire perché stiamo utilizzando kubernetes
-
+\subsection{A cosa serve ?}
 
 \textit{
-Nonostante aver organizzato il flusso di sviluppo, ed in parte quello di deploy, in un ambiente di produzione, è necessario garantire che non si verifichino interruzioni
-dei servizi, per esempio, causati dall'interruzione di un container o da un aggiornamento. Nel primo caso, ad esempio, è necessario avviare un nuovo
-container. Kubernetes fornisce un framework per far funzionare i sistemi distribuiti in modo resiliente, ad esempio, gestendo
+I container sono un buon modo per distribuire ed eseguire le applicazioni. In un ambiente di produzione, è necessario gestire i container che eseguono le applicazioni e garantire che non si verifichino interruzioni dei servizi. Per esempio, se un container si interrompe, è necessario avviare un nuovo container. 
+Kubernetes fornisce un framework per far funzionare i sistemi distribuiti in modo resiliente, ad esempio, gestendo
 tutti quei comportamenti in maniera automatica. Kubernetes si occupa della scalabilità, failover, distribuzione. 
 }
 
@@ -308,25 +308,24 @@ Tra i servizi forniti troviamo:
     \item \textbf{Gestione di informazioni sensibili e della configurazione}: kubernetes consente di memorizzare e gestire informazioni sensibili, come le password, i token OAuth e le chiavi SSH. Puoi distribuire e aggiornare le informazioni sensibili e la configurazione dell'applicazione senza dover ricostruire le immagini dei container e senza svelare le informazioni sensibili nella configurazione del tuo sistema;
 \end{enumerate}
 
-Per prima cosa, è stata dedicata attenzione alla creazione del db. Come già implementato nel docker-compose,
-l’obbiettivo è quello di istanziare dei databases MySQL, indipendenti dal be, con dei dati pre-caricati.
-Nel dettaglio, ogni Database è composto da i seguenti volumi di k8s:
+\subsection{Configurazione}
+
+Il primo step è configurare ogni database. Come già implementato nel docker-compose,
+l’obiettivo è quello di creare i databases MySQL, indipendenti a livello di deploy, con dei dati pre-caricati da uno script di inizializzazione.
+Nel dettaglio, ogni database è composto da i seguenti componenti di k8s:
 \begin{enumerate}
-    \item \textbf{ConfigMap} che permette di istanziare il database con i dati e le tabelle selezionate;
-    \item \textbf{PersistentVolumeClaim} utilizzato per la persistenza del database;
-    \item \textbf{Deployment} che permette di effettuare il deploy dell'immagine e settare le variabili d'ambiente;
-    \item \textbf{Service} 
+    \item \textbf{ConfigMap}, permette di istanziare il database con i dati e le tabelle selezionate;
+    \item \textbf{PersistentVolumeClaim}, utilizzato per la persistenza dei dati del database;
+    \item \textbf{Deployment}, descrive lo stato desiderato in una distribuzione;
+    \item \textbf{Service} fornisce ai Pod i propri indirizzi IP e un unico nome DNS per un set di Pod, e può bilanciare il carico su di essi.
+
 \end{enumerate}
 
 È stato previsto, inoltre, un \textbf{Secret volume} necessario per settare le credenziali di accesso dei database che tuttavia per praticità è stato disabilitato. Per mantenere l'intera infrastruttura
 scalabile i database avranno una ed una sola istanza.
 
-Invece, ogni back-end, è composto da un volume di \textit{Deploy} ed un \textit{Service} e 2 repliche.
+Ogni microservizio, invece, è descritto da un \textit{Deployment}, che stabilisce un numero di repliche pari a 2, e da un \textit{Service}, che si occuperà del bilanciamento del carico. Infine è opportuno sottolineare che i microservizi orchestratori e keycloak sono gli unici esposti, ovvero accesibili dall'esterno.
 
-\textit{TODO: Aggiungi descrizione su come hai messo su keycloak con k8s.....}
-
-% Inserire perché sono stati metti come LoadBalancer solo 2 microservizi
-% Inserire motivazione repliche
 
 \section{AWS}
 
