@@ -50,9 +50,8 @@ services:
       SERVER_PORT: 9091
       MYSQL_HOST: shipment_db
       KEYCLOAK_HOST: host.docker.internal
-      # TODO: localhost ? To test
-      # SAMPLE_HOST:
-      # BIOBANK_HOST:
+      SAMPLE_HOST: sampleService
+      BIOBANK_HOST: biobankService
   
   shipment_db:
     image: mysql:5.7
@@ -78,10 +77,9 @@ services:
       SERVER_PORT: 9092
       MYSQL_HOST: sample_db
       KEYCLOAK_HOST: host.docker.internal
-      # TODO: localhost ? To test
-      # SHIPMENT_HOST:
-      # BIOBANK_HOST:
-      # DONOR_HOST:
+      SHIPMENT_HOST: shipmentService
+      BIOBANK_HOST: biobankService
+      DONOR_HOST: donorService
   
   sample_db:
     image: mysql:5.7
